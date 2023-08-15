@@ -1,5 +1,8 @@
-package com.fercevik.userManagement.auth;
+package com.fercevik.userManagement.controllers;
 
+import com.fercevik.userManagement.auth.AuthenticationRequest;
+import com.fercevik.userManagement.auth.AuthenticationResponse;
+import com.fercevik.userManagement.auth.RegisterRequest;
 import com.fercevik.userManagement.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

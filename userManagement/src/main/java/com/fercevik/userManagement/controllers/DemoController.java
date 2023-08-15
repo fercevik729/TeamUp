@@ -1,4 +1,4 @@
-package com.fercevik.userManagement.demo;
+package com.fercevik.userManagement.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
