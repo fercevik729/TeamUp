@@ -1,5 +1,6 @@
-package com.fercevik.authService.user;
+package com.fercevik.authService.dao;
 
+import com.fercevik.authService.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

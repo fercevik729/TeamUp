@@ -1,17 +1,16 @@
-
 spring:
   application:
     name: tu-auth-service
   cloud:
     vault:
-      token: hvs.0sYOLoLyJupOPVvK5QIkgtyk
+      token: dev-token
       scheme: http
       kv:
         enabled: true
   config:
     import: vault://
   datasource:
-    url: jdbc:postgresql://localhost:5432/jwt_security
+    url: jdbc:postgresql://localhost:5432/security
     username: ${spring.datasource.user}
     password: ${spring.datasource.password}
     driver-class-name: org.postgresql.Driver

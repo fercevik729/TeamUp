@@ -1,4 +1,4 @@
-package com.fercevik.authService.user;
+package com.fercevik.authService.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,17 +22,14 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String imageUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("SIMPLE_USER"));
     }
 
     @Override
