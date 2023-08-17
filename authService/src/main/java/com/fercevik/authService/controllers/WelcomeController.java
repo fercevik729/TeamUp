@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/welcome")
 public class WelcomeController {
 
-    @GetMapping
+    @GetMapping("/welcome")
     public ResponseEntity<String> checkAuthStatus() {
         return ResponseEntity.ok("You have reached a secure endpoint");
     }
-
 }

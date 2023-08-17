@@ -1,10 +1,10 @@
 package com.fercevik.authService.services;
 
 import com.fercevik.authService.dto.GoogleOAuth2UserInfo;
+import com.fercevik.authService.model.Provider;
 import com.fercevik.authService.model.User;
 import com.fercevik.authService.dao.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,19 +36,24 @@ public class UserService extends OidcUserService implements UserDetailsService {
         userInfo.setId((String) attributes.get("sub"));
         userInfo.setImageUrl((String) attributes.get("picture"));
         userInfo.setName((String) attributes.get("name"));
-        updateUser(userInfo);
+        updateGoogleOAuth2User(userInfo);
         return user;
     }
 
-    private void updateUser(GoogleOAuth2UserInfo userInfo) {
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    private void updateGoogleOAuth2User(GoogleOAuth2UserInfo userInfo) {
         // Updates a user's information in the user database to the new values from the OAuth2 Provider
         User user = userRepository.findUserByEmail(userInfo.getEmail())
                 .orElseGet(User::new);
         user.setEmail(userInfo.getEmail());
         user.setImageUrl(userInfo.getImageUrl());
         user.setName(userInfo.getName());
+        user.setProvider(Provider.GOOGLE);
 
         userRepository.save(user);
-
     }
+
 }

@@ -1,10 +1,10 @@
 package com.fercevik.authService.services;
 
 import com.fercevik.authService.auth.RegisterRequest;
+import com.fercevik.authService.model.Provider;
 import com.fercevik.authService.model.User;
 import com.fercevik.authService.dao.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,12 @@ public class AuthenticationService {
                 .name(request.getFirstname() + request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .provider(Provider.LOCAL)
                 .build();
         return repository.save(user);
+    }
+
+    public void deleteUser(String email) {
+        repository.deleteUserByEmail(email);
     }
 }

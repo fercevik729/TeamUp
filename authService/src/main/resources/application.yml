@@ -35,9 +35,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: health # Add env to view the value of environmental variables
+        include: health,env # Add env to view the value of environmental variables
   endpoint:
     configprops:
-      show-values: never # Set this to 'always' to view config property values in dev
+      show-values: always # Set this to 'always' to view config property values in dev
     env:
-      show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
+      show-values: always # Set this to 'always' to view config values derived from env and HC Vault in dev

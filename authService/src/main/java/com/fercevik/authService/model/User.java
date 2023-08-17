@@ -27,6 +27,9 @@ public class User implements UserDetails {
     private String password;
     private String imageUrl;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("SIMPLE_USER"));
