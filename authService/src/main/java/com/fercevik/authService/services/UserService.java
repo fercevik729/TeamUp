@@ -44,6 +44,10 @@ public class UserService extends OidcUserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void deleteAccount(User user) {
+        userRepository.deleteUserByEmail(user.getEmail());
+    }
+
     private void updateGoogleOAuth2User(GoogleOAuth2UserInfo userInfo) {
         // Updates a user's information in the user database to the new values from the OAuth2 Provider
         User user = userRepository.findUserByEmail(userInfo.getEmail())

@@ -17,7 +17,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -35,9 +35,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,env # Add env to view the value of environmental variables
+        include: health # Add env to view the value of environmental variables
   endpoint:
     configprops:
-      show-values: always # Set this to 'always' to view config property values in dev
+      show-values: never # Set this to 'always' to view config property values in dev
     env:
-      show-values: always # Set this to 'always' to view config values derived from env and HC Vault in dev
+      show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
+logging:
+  level:
+    root: info

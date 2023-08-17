@@ -26,18 +26,17 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/actuator/**").permitAll() // For debugging
-            .requestMatchers("/register/").permitAll()
+            .requestMatchers("/actuator/**", "/register").permitAll() // For debugging
             .anyRequest().authenticated()
-        )
-        .oauth2Login(oauth -> oauth
-                .userInfoEndpoint(user -> user.oidcUserService(userService))
-                .successHandler(successHandler())
         )
         .formLogin(fl -> fl
                 .successHandler(successHandler())
         )
-        .authenticationProvider(provider);
+        .authenticationProvider(provider)
+        .oauth2Login(oauth -> oauth
+                .userInfoEndpoint(user -> user.oidcUserService(userService))
+                .successHandler(successHandler())
+        );
         return http.build();
     }
 
