@@ -1,6 +1,12 @@
+keycloak:
+  login-url: http://localhost:8080/realms/TeamUp/protocol/openid-connect/token
+  grant-type: password
+  client-id: auth-service
+  client-secret: ${keycloak.client-secret}
+
 spring:
   application:
-    name: tu-auth-service
+    name: auth-service
   cloud:
     vault:
       token: dev-token
@@ -9,28 +15,29 @@ spring:
         enabled: true
   config:
     import: vault://
-  datasource:
-    url: jdbc:postgresql://localhost:5432/security
-    username: ${spring.datasource.user}
-    password: ${spring.datasource.password}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
   security:
     oauth2:
       client:
         registration:
-          google.client-id: ${google-oauth2.client_id}
-          google.client-secret: ${google-oauth2.client_secret}
+          keycloak.client-id: login-app
+          keycloak.authorization-grant-type: authorization_code
+          keycloak.scope: openid
+        provider:
+          keycloak.issuer: http://localhost:8080/realms/TeamUp
+          keycloak.user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/TeamUp
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+jwt:
+  auth:
+    converter:
+      resource-id: auth-service
+      principal-attribute: preferred_username
 server:
-  port: 8090
+  port: 8081
+  servlet:
+    context-path: "/api"
 management:
   endpoints:
     web:
