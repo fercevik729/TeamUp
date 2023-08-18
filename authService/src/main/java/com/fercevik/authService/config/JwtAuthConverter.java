@@ -2,7 +2,6 @@ package com.fercevik.authService.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
