@@ -1,0 +1,3 @@
+converter:
+  principal-attribute: preferred_username
+  resource-id: gateway

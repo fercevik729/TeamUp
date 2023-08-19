@@ -8,7 +8,8 @@ spring:
           uri: http://localhost:8080/realms/TeamUp/account
           predicates:
             - Path=/login/**
-
+          filters:
+            - TokenRelay=
     vault:
       token: dev-token
       scheme: http
@@ -19,22 +20,21 @@ spring:
   security:
     oauth2:
       client:
-        registration:
-          keycloak.client-id: gateway
-          keycloak.authorization-grant-type: authorization_code
-          keycloak.scope: openid
         provider:
-          keycloak.issuer: http://localhost:8080/realms/TeamUp
-          keycloak.user-name-attribute: preferred_username
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/TeamUp
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-jwt:
-  auth:
-    converter:
-      resource-id: gateway
-      principal-attribute: preferred_username
+          my-keycloak-provider:
+            issuer-uri: http://localhost:8080/realms/TeamUp
+            user-name-attribute: preferred_username
+        registration:
+          gateway:
+            provider: my-keycloak-provider
+            authorization-grant-type: authorization_code
+            client-id: gateway
+            redirect-uri: '{baseUrl}/login/oauth2/code/keycloak'
+            scope:
+              - openid
+              - profile
+              - email
+              - roles
 server:
   port: 8081
 management:
@@ -49,4 +49,4 @@ management:
       show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
 logging:
   level:
-    root: info
+    root: debug

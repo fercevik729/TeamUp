@@ -1,4 +1,4 @@
-package com.fercevik.gateway.config;
+package com.fercevik.tokenlib;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,8 +8,8 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Validated
 @Configuration
-@ConfigurationProperties(prefix = "jwt.auth.converter")
-public class JwtAuthConverterProperties {
+@ConfigurationProperties(prefix = "converter")
+public class ConverterProperties {
     private String resourceId;
     private String principalAttribute;
 }
