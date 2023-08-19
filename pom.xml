@@ -18,6 +18,7 @@
     <modules>
         <module>gateway</module>
         <module>token-lib</module>
+        <module>program-service</module>
     </modules>
 
 </project>

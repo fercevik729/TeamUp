@@ -1,10 +1,10 @@
-package com.fercevik.tokenlib;
+package com.fercevik.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TokenLibApplicationTests {
+class GatewayApplicationTests {
 
 	@Test
 	void contextLoads() {
