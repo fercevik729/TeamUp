@@ -16,7 +16,6 @@
     </properties>
 
     <modules>
-        <module>authService</module>
         <module>gateway</module>
     </modules>
 

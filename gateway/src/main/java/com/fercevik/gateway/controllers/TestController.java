@@ -1,4 +1,4 @@
-package com.fercevik.authService.controllers;
+package com.fercevik.gateway.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

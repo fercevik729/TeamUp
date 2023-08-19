@@ -1,4 +1,4 @@
-package com.fercevik.authService.config;
+package com.fercevik.gateway.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
