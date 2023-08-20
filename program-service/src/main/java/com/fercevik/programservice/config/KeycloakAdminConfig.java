@@ -19,6 +19,7 @@ public class KeycloakAdminConfig {
                 .serverUrl("http://localhost:8080")
                 .realm("master")
                 .clientId(properties.getClientId())
+                .clientSecret(properties.getClientSecret())
                 .grantType(OAuth2Constants.PASSWORD)
                 .username(properties.getUsername())
                 .password(password)

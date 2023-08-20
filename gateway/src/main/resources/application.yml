@@ -8,6 +8,16 @@ spring:
           uri: http://localhost:8082/programs
           predicates:
             - Path=/programs/**
+          filters:
+            - TokenRelay=
+
+    vault:
+      token: dev-token
+      scheme: http
+      kv:
+        enabled: true
+  config:
+    import: vault://
   security:
     oauth2:
       client:
@@ -20,9 +30,9 @@ spring:
             provider: my-keycloak-provider
             authorization-grant-type: authorization_code
             client-id: gateway
+            client-secret: ${keycloak.client-secret}
             redirect-uri: '{baseUrl}/login/oauth2/code/keycloak'
             scope:
-              - openid
               - profile
               - email
               - roles

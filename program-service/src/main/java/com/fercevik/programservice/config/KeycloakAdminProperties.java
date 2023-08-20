@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class KeycloakAdminProperties {
     private String realm;
     private String clientId;
+    private String clientSecret;
     private String username;
     private String password;
 }
