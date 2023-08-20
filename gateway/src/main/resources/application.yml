@@ -4,19 +4,10 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: account
-          uri: http://localhost:8080/realms/TeamUp/account
+        - id: program-service
+          uri: http://localhost:8082/programs
           predicates:
-            - Path=/login/**
-          filters:
-            - TokenRelay=
-    vault:
-      token: dev-token
-      scheme: http
-      kv:
-        enabled: true
-  config:
-    import: vault://
+            - Path=/programs/**
   security:
     oauth2:
       client:
@@ -49,4 +40,4 @@ management:
       show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
 logging:
   level:
-    root: info
+    root: debug

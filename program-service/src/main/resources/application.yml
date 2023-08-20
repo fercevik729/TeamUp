@@ -3,3 +3,27 @@ server:
 converter:
   resource-id: "gateway"
   principal-attribute: "preferred_username"
+keycloak:
+  realm: "TeamUp"
+  clientId: ${keycloak.clientId}
+  username: ${keycloak.username}
+  password: ${keycloak.password}
+
+spring:
+  application:
+    name: program-service
+  cloud:
+    vault:
+      token: dev-token
+      scheme: http
+      kv:
+        enabled: true
+  config:
+    import: vault://
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/TeamUp
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
