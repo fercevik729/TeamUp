@@ -51,4 +51,4 @@ management:
       show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
 logging:
   level:
-    root: debug
+    root: info
