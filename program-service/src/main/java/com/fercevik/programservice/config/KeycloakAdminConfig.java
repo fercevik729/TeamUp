@@ -12,7 +12,7 @@ import java.util.Base64;
 public class KeycloakAdminConfig {
 
     @Bean
-    public Keycloak keycloakAdminClient(KeycloakAdminProperties properties) {
+    public Keycloak keycloakAdminClient(KeycloakProperties properties) {
         byte[] decodedBytes = Base64.getDecoder().decode(properties.getPassword());
         String password = new String(decodedBytes);
         return KeycloakBuilder.builder()

@@ -26,13 +26,14 @@ spring:
             issuer-uri: http://localhost:8080/realms/TeamUp
             user-name-attribute: preferred_username
         registration:
-          gateway:
+          team-up-client:
             provider: my-keycloak-provider
             authorization-grant-type: authorization_code
-            client-id: gateway
+            client-id: team-up-client
             client-secret: ${keycloak.client-secret}
             redirect-uri: '{baseUrl}/login/oauth2/code/keycloak'
             scope:
+              - openid
               - profile
               - email
               - roles

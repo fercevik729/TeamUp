@@ -9,6 +9,7 @@ keycloak:
   clientSecret: ${keycloak.client-secret}
   username: ${keycloak.username}
   password: ${keycloak.password}
+  introspection-uri: http://localhost:8080/realms/${keycloak.realm}/protocol/openid-connect/token/introspect
 
 spring:
   application:
@@ -27,7 +28,7 @@ spring:
         opaquetoken:
           client-id: ${keycloak.clientId}
           client-secret: ${keycloak.clientSecret}
-          introspection-uri: http://localhost:8080/realms/${keycloak.realm}/protocol/openid-connect/token/introspect
+          introspection-uri: ${keycloak.introspection-uri}
 logging:
   level:
     root: debug
