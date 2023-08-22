@@ -16,7 +16,8 @@
     </properties>
 
     <modules>
-        <module>userManagement</module>
+        <module>gateway</module>
+        <module>program-service</module>
     </modules>
 
 </project>

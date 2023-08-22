@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: program-service
+          uri: http://localhost:8082/programs
+          predicates:
+            - Path=/programs/**
+          filters:
+            - TokenRelay=
+
+    vault:
+      token: dev-token
+      scheme: http
+      kv:
+        enabled: true
+  config:
+    import: vault://
+  security:
+    oauth2:
+      client:
+        provider:
+          my-keycloak-provider:
+            issuer-uri: http://localhost:8080/realms/TeamUp
+            user-name-attribute: preferred_username
+        registration:
+          team-up-client:
+            provider: my-keycloak-provider
+            authorization-grant-type: authorization_code
+            client-id: team-up-client
+            client-secret: ${keycloak.client-secret}
+            redirect-uri: '{baseUrl}/login/oauth2/code/keycloak'
+            scope:
+              - openid
+              - profile
+              - email
+              - roles
+server:
+  port: 8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health # Add env to view the value of environmental variables
+  endpoint:
+    configprops:
+      show-values: never # Set this to 'always' to view config property values in dev
+    env:
+      show-values: never # Set this to 'always' to view config values derived from env and HC Vault in dev
+logging:
+  level:
+    root: info
