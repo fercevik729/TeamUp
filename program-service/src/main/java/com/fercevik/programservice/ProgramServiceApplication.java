@@ -1,6 +1,5 @@
 package com.fercevik.programservice;
 
-import com.fercevik.tokenlib.KeycloakJwtRolesConverter;
 import lombok.Data;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,7 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @Data
 @EnableWebSecurity
-@SpringBootApplication(scanBasePackages = {"com.fercevik.programservice", "com.fercevik.tokenlib"})
+@SpringBootApplication
 public class ProgramServiceApplication {
 
 	public static void main(String[] args) {

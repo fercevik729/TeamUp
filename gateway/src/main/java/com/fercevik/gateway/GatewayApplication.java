@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 
+import java.net.URI;
+
 @SpringBootApplication
 @EnableWebFluxSecurity
 public class GatewayApplication {
@@ -24,7 +26,8 @@ public class GatewayApplication {
 	@Bean
 	public ServerLogoutSuccessHandler keycloakLogoutSuccessHandler(ReactiveClientRegistrationRepository repository) {
 		var oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(repository);
-		oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}/logout.html");
+		oidcLogoutSuccessHandler.setLogoutSuccessUrl(URI.create(
+				"http://localhost:8080/realms/TeamUp/protocol/openid-connect/logout"));
 		return oidcLogoutSuccessHandler;
 	}
 
@@ -32,10 +35,11 @@ public class GatewayApplication {
 	public SecurityWebFilterChain springSecurityWebFilterChain(ServerHttpSecurity http,
 															   ServerLogoutSuccessHandler handler) {
 		http.authorizeExchange(auth -> auth
-				.pathMatchers("/actuator/**", "/", "/logout.html", "/index.html", "/features.html")
-				.permitAll()
+				.pathMatchers("/actuator/**", "/", "/index.html", "/features.html").permitAll()
 				.anyExchange().authenticated()
-		).oauth2Login(Customizer.withDefaults()).logout(logout -> logout.logoutSuccessHandler(handler));
+		).oauth2Login(Customizer.withDefaults())
+		  .logout(logout -> logout
+				  .logoutSuccessHandler(handler));
 		return http.build();
 	}
 

@@ -1,5 +1,6 @@
 package com.fercevik.programservice.controller;
 
+import com.fercevik.programservice.constants.KeycloakConstants;
 import com.fercevik.programservice.services.OpaqueTokenService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/programs")
 public class ProgramController {
     private final OpaqueTokenService opaqueTokenService;
-    private static final String USER_ROLE = "ROLE_app_user";
 
     @GetMapping
     public ResponseEntity<String> echo(BearerTokenAuthentication token) {
-        log.warn(token.toString());
-        if (opaqueTokenService.hasAuthority(token, USER_ROLE)) {
-            return ResponseEntity.ok().body("Hello Sir "+token.getName() + ", you have reached a secure endpoint");
+        log.warn(token.getName());
+        if (opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE)) {
+            return ResponseEntity.ok("Hello Sir "+opaqueTokenService.extractEmail(token) + ", you have reached a secure endpoint");
+        } else if (opaqueTokenService.hasAuthority(token, KeycloakConstants.ADMIN_ROLE)) {
+            return ResponseEntity.ok("HELLO MR. ADMIN");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
