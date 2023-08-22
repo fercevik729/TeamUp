@@ -1,0 +1,44 @@
+server:
+  port: 8082
+keycloak:
+  realm: "TeamUp"
+  clientId: ${keycloak.client-id}
+  clientSecret: ${keycloak.client-secret}
+  username: ${keycloak.username}
+  password: ${keycloak.password}
+  introspection-uri: ${keycloak.host}/realms/${keycloak.realm}/protocol/openid-connect/token/introspect
+  host: "http://localhost:8080"
+
+spring:
+  application:
+    name: program-service
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  cloud:
+    vault:
+      token: dev-token
+      scheme: http
+      kv:
+        enabled: true
+  config:
+    import: vault://
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: ${keycloak.clientId}
+          client-secret: ${keycloak.clientSecret}
+          introspection-uri: ${keycloak.introspection-uri}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/programs
+    username: ${postgresql.username}
+    password: ${postgresql.password}
+logging:
+  level:
+    root: info
