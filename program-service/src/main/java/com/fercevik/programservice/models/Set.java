@@ -9,13 +9,12 @@ import java.math.BigInteger;
  * Has a ManyToOne relationship with objects
  * of the Exercise model
  */
-@Entity
-@Table(name = "sets")
+@Entity(name = "sets")
 public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "set_id")
-    private BigInteger setId;
+    private Long setId;
 
     private int setNumber;
     private int reps;

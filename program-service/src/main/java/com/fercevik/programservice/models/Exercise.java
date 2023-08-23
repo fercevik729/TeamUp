@@ -18,7 +18,7 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "exercise_id")
-    private BigInteger exerciseId;
+    private Long exerciseId;
 
     private String name;
 

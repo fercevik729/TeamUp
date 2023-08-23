@@ -2,9 +2,17 @@ package com.fercevik.programservice.models;
 
 import jakarta.persistence.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-@Entity
+/**
+ * Entity model that represents programs.
+ * Has a OneToMany relationship with objects
+ * of the Workout model.
+ */
+@Entity(name = "programs")
 public class Program {
 
     @Id
@@ -12,12 +20,37 @@ public class Program {
     @Column(name = "program_id")
     private Long programId;
 
+    @Column(name = "owner_id")
     private UUID ownerId;
     private String name;
 
     @Column(nullable = false)
     private boolean active = false;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @ElementCollection
+    @CollectionTable(name = "program_tags", joinColumns = @JoinColumn(name = "program_id"))
+    @Column(name = "tags")
+    private List<String> tags;
+
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     private List<Workout> workouts = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

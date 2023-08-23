@@ -2,9 +2,8 @@ package com.fercevik.programservice.models;
 
 import jakarta.persistence.*;
 
-import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,13 +18,13 @@ public class Workout {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "workout_id")
-    private BigInteger workoutId;
+    private Long workoutId;
 
     private String name;
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    private LocalDate date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
     private List<Exercise> exercises = new ArrayList<>();
@@ -33,4 +32,14 @@ public class Workout {
     @ManyToOne
     @JoinColumn(name = "program_id")
     private Program program;
+
+    @PrePersist
+    protected void onCreate() {
+        date = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        date = new Date();
+    }
 }
