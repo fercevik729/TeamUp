@@ -1,8 +1,11 @@
-package com.fercevik.programservice.models;
+package com.fercevik.programservice.dao;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,10 @@ import java.util.List;
  * of the Set model.
  */
 @Entity(name = "exercises")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

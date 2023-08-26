@@ -15,15 +15,9 @@ public class KeycloakAdminConfig {
     public Keycloak keycloakAdminClient(KeycloakProperties properties) {
         byte[] decodedBytes = Base64.getDecoder().decode(properties.getPassword());
         String password = new String(decodedBytes);
-        return KeycloakBuilder.builder()
-                .serverUrl("http://localhost:8080")
-                .realm("master")
-                .clientId(properties.getClientId())
-                .clientSecret(properties.getClientSecret())
-                .grantType(OAuth2Constants.PASSWORD)
-                .username(properties.getUsername())
-                .password(password)
-                .build();
+        return KeycloakBuilder.builder().serverUrl("http://localhost:8080").realm("master")
+                .clientId(properties.getClientId()).clientSecret(properties.getClientSecret())
+                .grantType(OAuth2Constants.PASSWORD).username(properties.getUsername()).password(password).build();
     }
 
 }

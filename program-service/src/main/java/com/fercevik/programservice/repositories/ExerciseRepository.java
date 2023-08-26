@@ -1,7 +1,7 @@
 package com.fercevik.programservice.repositories;
 
-import com.fercevik.programservice.models.Exercise;
-import com.fercevik.programservice.models.Workout;
+import com.fercevik.programservice.dao.Exercise;
+import com.fercevik.programservice.dao.Workout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
