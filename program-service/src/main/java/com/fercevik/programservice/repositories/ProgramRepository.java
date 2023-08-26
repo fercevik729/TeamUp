@@ -1,6 +1,6 @@
 package com.fercevik.programservice.repositories;
 
-import com.fercevik.programservice.models.Program;
+import com.fercevik.programservice.dao.Program;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,12 +13,15 @@ import java.util.UUID;
 
 @Repository
 public interface ProgramRepository extends JpaRepository<Program, Long> {
-    List<Program> findProgramsByOwnerId(UUID owner_id);
 
     /**
      * ProgramRepository methods for app users. They all require the ownerId parameter
      * to distinguish programs
      */
+    List<Program> findProgramsByOwnerId(UUID owner_id);
+
+    Program findProgramByOwnerIdAndProgramId(UUID owner_id, Long program_id);
+
     @Query("SELECT p FROM programs p WHERE p.tags IN :tags AND p.ownerId = :ownerId")
     List<Program> findProgramsByTags(List<String> tags, UUID ownerId);
 

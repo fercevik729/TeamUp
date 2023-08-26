@@ -17,28 +17,26 @@ import java.net.URI;
 @EnableWebFluxSecurity
 public class GatewayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GatewayApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
 
-	@Bean
-	public ServerLogoutSuccessHandler keycloakLogoutSuccessHandler(ReactiveClientRegistrationRepository repository) {
-		var oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(repository);
-		oidcLogoutSuccessHandler.setLogoutSuccessUrl(URI.create(
-				"http://localhost:8080/realms/TeamUp/protocol/openid-connect/logout"));
-		return oidcLogoutSuccessHandler;
-	}
+    @Bean
+    public ServerLogoutSuccessHandler keycloakLogoutSuccessHandler(ReactiveClientRegistrationRepository repository) {
+        var oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(repository);
+        oidcLogoutSuccessHandler.setLogoutSuccessUrl(
+                URI.create("http://localhost:8080/realms/TeamUp/protocol/openid-connect/logout"));
+        return oidcLogoutSuccessHandler;
+    }
 
-	@Bean
-	public SecurityWebFilterChain springSecurityWebFilterChain(ServerHttpSecurity http,
-															   ServerLogoutSuccessHandler handler) {
-		http.authorizeExchange(auth -> auth
-				.pathMatchers("/actuator/**", "/", "/index.html", "/features.html").permitAll()
-				.anyExchange().authenticated()
-		).oauth2Login(Customizer.withDefaults())
-		  .logout(logout -> logout
-				  .logoutSuccessHandler(handler));
-		return http.build();
-	}
+    @Bean
+    public SecurityWebFilterChain springSecurityWebFilterChain(ServerHttpSecurity http,
+                                                               ServerLogoutSuccessHandler handler) {
+        http.authorizeExchange(
+                        auth -> auth.pathMatchers("/actuator/**", "/", "/index.html", "/features.html").permitAll()
+                                .anyExchange().authenticated()).oauth2Login(Customizer.withDefaults())
+                .logout(logout -> logout.logoutSuccessHandler(handler));
+        return http.build();
+    }
 
 }

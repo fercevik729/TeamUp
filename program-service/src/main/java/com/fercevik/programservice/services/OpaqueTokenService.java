@@ -9,9 +9,9 @@ import org.springframework.security.oauth2.server.resource.authentication.Bearer
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 // TODO: make this a library for other microservices to use
 @Data
@@ -31,6 +31,7 @@ public class OpaqueTokenService {
 
     /**
      * Extracts all the authorities/scopes from the Bearer token, including Keycloak realm roles
+     *
      * @param token Bearer authentication token
      * @return the authorities as a List<GrantedAuthority>
      */
@@ -42,8 +43,7 @@ public class OpaqueTokenService {
             List<String> realm_roles = (List<String>) roles.get("roles");
             // Add realm_roles to scopes
             if (realm_roles != null) {
-                var realm_authorities = realm_roles.stream()
-                        .map(role -> new SimpleGrantedAuthority("ROLE_"+role))
+                var realm_authorities = realm_roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                         .toList();
                 scopes.addAll(realm_authorities);
             }
@@ -55,6 +55,7 @@ public class OpaqueTokenService {
 
     /**
      * Extracts the email claim from the Bearer token
+     *
      * @param token Bearer authentication token
      * @return value associated with the "email" claim or null
      */
@@ -63,15 +64,25 @@ public class OpaqueTokenService {
     }
 
     /**
+     * Extracts the user id from the name claim of the Bearer token
+     *
+     * @param token Bearer authentication token
+     * @return user id
+     */
+    public UUID extractUserId(BearerTokenAuthentication token) {
+        return UUID.fromString(token.getName());
+    }
+
+    /**
      * Checks if a Bearer token has a particular scope
+     *
      * @param token Bearer authentication token
      * @param scope scope name as a String
      * @return true if it has the scope, false otherwise
      */
     public boolean hasAuthority(BearerTokenAuthentication token, String scope) {
         List<GrantedAuthority> scopes = extractAuthorities(token);
-        return scopes.stream()
-                .anyMatch(r -> r.equals(new SimpleGrantedAuthority(scope)));
+        return scopes.stream().anyMatch(r -> r.equals(new SimpleGrantedAuthority(scope)));
 
     }
 
