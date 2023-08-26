@@ -3,6 +3,7 @@ package com.fercevik.programservice.models;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
+import java.time.Duration;
 
 /**
  * Entity model that represents exercise sets
@@ -20,6 +21,7 @@ public class Set {
     private int reps;
     private double weight;
 
+    private Duration duration;
     @ManyToOne
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
