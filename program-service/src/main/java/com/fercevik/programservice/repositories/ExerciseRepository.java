@@ -4,9 +4,11 @@ import com.fercevik.programservice.models.Exercise;
 import com.fercevik.programservice.models.Workout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     List<Exercise> findExercisesByWorkout(Workout workout);
 
