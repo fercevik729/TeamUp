@@ -27,13 +27,6 @@ spring:
         enabled: true
   config:
     import: vault://
-  security:
-    oauth2:
-      resourceserver:
-        opaquetoken:
-          client-id: ${keycloak.clientId}
-          client-secret: ${keycloak.clientSecret}
-          introspection-uri: ${keycloak.introspection-uri}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/programs
@@ -41,4 +34,4 @@ spring:
     password: ${postgresql.password}
 logging:
   level:
-    root: info
+    root: warn

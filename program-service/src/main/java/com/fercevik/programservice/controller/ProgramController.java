@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -41,21 +40,22 @@ public class ProgramController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createProgram(@Valid @RequestBody ProgramDTO newProgram,
-                                                BearerTokenAuthentication token, BindingResult bindingResult) {
+    public ResponseEntity<ProgramDTO> createProgram(@Valid @RequestBody ProgramDTO newProgram,
+                                                BearerTokenAuthentication token) {
         // Check authentication
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        // Check DTO in request body
-        if (bindingResult.hasErrors()) return ResponseEntity.badRequest().body("Validation error");
 
         UUID userId = opaqueTokenService.extractUserId(token);
+        /*
         Program saved = programService.save(userId, newProgram);
 
         URI destination = UriComponentsBuilder.fromUriString("/programs/" + saved.getProgramId().toString()).build()
                 .toUri();
-        return ResponseEntity.created(destination).build();
 
+        return ResponseEntity.created(destination).build();
+         */
+        return ResponseEntity.created(URI.create("/programs/1")).body(newProgram);
     }
 
     @GetMapping("/{programId}")
