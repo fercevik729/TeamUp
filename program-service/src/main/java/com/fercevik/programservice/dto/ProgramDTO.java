@@ -1,5 +1,6 @@
 package com.fercevik.programservice.dto;
 
+import com.fercevik.programservice.shared.WeightUnits;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,6 +16,8 @@ public class ProgramDTO {
     private String name;
     private boolean active = false;
     private List<String> tags;
+
+    private WeightUnits units = WeightUnits.POUNDS;
 
     @NotEmpty(message = "workouts cannot be empty")
     private List<WorkoutDTO> workouts = new ArrayList<>();
