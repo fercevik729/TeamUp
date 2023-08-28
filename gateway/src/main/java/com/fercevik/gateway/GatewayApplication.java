@@ -36,6 +36,7 @@ public class GatewayApplication {
                         auth -> auth.pathMatchers("/actuator/**", "/", "/index.html", "/features.html").permitAll()
                                 .anyExchange().authenticated()).oauth2Login(Customizer.withDefaults())
                 .logout(logout -> logout.logoutSuccessHandler(handler));
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 

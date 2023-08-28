@@ -1,5 +1,6 @@
 package com.fercevik.programservice.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class ExerciseDTO {
     @Size(min = 3, max = 50, message = "target must be between 3 and 50 characters long")
     private String target;
 
+    @Valid
     @NotEmpty(message = "sets cannot be empty")
     private List<SetDTO> sets;
 }

@@ -37,11 +37,11 @@ public class ProgramService {
 
     public Program save(UUID userId, ProgramDTO dto) {
         var program = convertProgramFromDTO(userId, dto);
+        // TODO: setup associations between objects
         return programRepository.save(program);
     }
 
     // Private methods to convert from DTO to DAO objects
-    // TODO: setup associations between objects if needed
 
     /**
      * Converts a SetDTO object into a Set Entity object

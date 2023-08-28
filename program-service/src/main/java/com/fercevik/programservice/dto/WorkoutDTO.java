@@ -1,5 +1,6 @@
 package com.fercevik.programservice.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class WorkoutDTO {
     private String description;
     private Date date;
 
+    @Valid
     @NotEmpty(message = "exercises cannot be empty")
     private List<ExerciseDTO> exercises;
 }
