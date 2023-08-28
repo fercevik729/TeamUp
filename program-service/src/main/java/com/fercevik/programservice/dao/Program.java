@@ -1,5 +1,6 @@
 package com.fercevik.programservice.dao;
 
+import com.fercevik.programservice.shared.WeightUnits;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,9 @@ public class Program {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @Enumerated(value = EnumType.STRING)
+    private WeightUnits units = WeightUnits.POUNDS;
 
     @ElementCollection
     @CollectionTable(name = "program_tags", joinColumns = @JoinColumn(name = "program_id"))
