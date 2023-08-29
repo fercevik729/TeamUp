@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -20,7 +21,7 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
      */
     List<Program> findProgramsByOwnerId(UUID owner_id);
 
-    Program findProgramByOwnerIdAndProgramId(UUID owner_id, Long program_id);
+    Optional<Program> findProgramByOwnerIdAndProgramId(UUID owner_id, Long program_id);
 
     @Query("SELECT p FROM programs p WHERE p.tags IN :tags AND p.ownerId = :ownerId")
     List<Program> findProgramsByTags(List<String> tags, UUID ownerId);
@@ -35,7 +36,7 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     List<Program> findProgramsByInactive(UUID ownerId);
 
     @Query("SELECT p FROM programs p WHERE p.active = true AND p.ownerId = :ownerId")
-    Program findProgramByActive(UUID ownerId);
+    Optional<Program> findProgramByActive(UUID ownerId);
 
     @Modifying
     @Transactional

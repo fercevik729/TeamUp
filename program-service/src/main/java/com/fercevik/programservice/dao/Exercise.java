@@ -2,7 +2,6 @@ package com.fercevik.programservice.dao;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +17,6 @@ import java.util.List;
  */
 @Entity(name = "exercises")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Exercise {
@@ -28,9 +26,7 @@ public class Exercise {
     private Long exerciseId;
 
     private String name;
-
     private String description;
-
     private String target;
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)

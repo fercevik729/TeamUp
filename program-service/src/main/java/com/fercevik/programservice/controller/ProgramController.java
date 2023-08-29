@@ -29,7 +29,7 @@ public class ProgramController {
 
     // CRUD Operations for User programs
     @GetMapping
-    public ResponseEntity<List<Program>> getAllPrograms(BearerTokenAuthentication token) {
+    public ResponseEntity<List<ProgramDTO>> getAllPrograms(BearerTokenAuthentication token) {
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -40,26 +40,23 @@ public class ProgramController {
     }
 
     @PostMapping
-    public ResponseEntity<ProgramDTO> createProgram(@Valid @RequestBody ProgramDTO newProgram,
+    public ResponseEntity<String> createProgram(@Valid @RequestBody ProgramDTO newProgram,
                                                 BearerTokenAuthentication token) {
         // Check authentication
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         UUID userId = opaqueTokenService.extractUserId(token);
-        /*
         Program saved = programService.save(userId, newProgram);
 
         URI destination = UriComponentsBuilder.fromUriString("/programs/" + saved.getProgramId().toString()).build()
                 .toUri();
 
         return ResponseEntity.created(destination).build();
-         */
-        return ResponseEntity.created(URI.create("/programs/1")).body(newProgram);
     }
 
     @GetMapping("/{programId}")
-    public ResponseEntity<Program> getProgram(@PathVariable Long programId, BearerTokenAuthentication token) {
+    public ResponseEntity<ProgramDTO> getProgram(@PathVariable Long programId, BearerTokenAuthentication token) {
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
@@ -68,7 +65,7 @@ public class ProgramController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<Program> getActiveProgram(BearerTokenAuthentication token) {
+    public ResponseEntity<ProgramDTO> getActiveProgram(BearerTokenAuthentication token) {
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 

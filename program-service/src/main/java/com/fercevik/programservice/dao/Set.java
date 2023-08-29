@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Duration;
 
 /**
@@ -27,8 +28,8 @@ public class Set {
     private int setNumber;
     private int reps;
     private double weight;
-
     private Duration duration;
+
     @ManyToOne
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;

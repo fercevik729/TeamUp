@@ -1,12 +1,21 @@
 package com.fercevik.programservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.Duration;
 
 @Data
-public class SetDTO {
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SetDTO implements Serializable {
     private Long setId;
     @Min(value = 1, message = "Set number cannot be less than 1")
     private int setNumber;
