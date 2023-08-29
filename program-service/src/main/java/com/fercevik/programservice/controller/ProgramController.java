@@ -46,9 +46,11 @@ public class ProgramController {
         if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        // Save the user's program
         UUID userId = opaqueTokenService.extractUserId(token);
         Program saved = programService.save(userId, newProgram);
 
+        // Create response
         URI destination = UriComponentsBuilder.fromUriString("/programs/" + saved.getProgramId().toString()).build()
                 .toUri();
 
