@@ -10,8 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
-    List<Exercise> findExercisesByWorkout(Workout workout);
-
     @Query("SELECT e FROM exercises e WHERE e.description LIKE :desc")
     List<Exercise> findExercisesByDescription(String desc);
 

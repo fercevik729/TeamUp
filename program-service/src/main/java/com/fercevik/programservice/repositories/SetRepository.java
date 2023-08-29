@@ -9,6 +9,4 @@ import java.util.List;
 
 @Repository
 public interface SetRepository extends JpaRepository<Set, Long> {
-    List<Set> findSetsByExercise(Exercise exercise);
-
 }

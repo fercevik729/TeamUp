@@ -9,7 +9,6 @@ import com.fercevik.programservice.dto.ProgramDTO;
 import com.fercevik.programservice.dto.SetDTO;
 import com.fercevik.programservice.dto.WorkoutDTO;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,59 +17,39 @@ import java.util.UUID;
 public class DataConverter {
 
     // Helper methods to convert from DTO -> DAO
+
     /**
      * Converts a SetDTO object into a Set Entity object
      *
-     * @param dto      SetDTO object
-     * @param exercise Exercise that the SetDTO is associated with
+     * @param dto SetDTO object
      * @return a Set Entity instance
      */
-    private static Set convertSetFromDTO(SetDTO dto, Exercise exercise) {
-        return Set.builder().weight(dto.getWeight()).duration(dto.getDuration()).reps(dto.getReps()).exercise(exercise)
-                .build();
+    private static Set convertSetFromDTO(SetDTO dto) {
+        return Set.builder().weight(dto.getWeight()).duration(dto.getDuration()).reps(dto.getReps()).build();
     }
 
     /**
      * Converts an ExerciseDTO object into an Exercise Entity object
      *
-     * @param dto     ExerciseDTO object
-     * @param workout Workout that the ExerciseDTO is associated with
+     * @param dto ExerciseDTO object
      * @return an Exercise Entity instance
      */
-    private static Exercise convertExerciseFromDTO(ExerciseDTO dto, Workout workout) {
-        Exercise exercise = new Exercise();
-        exercise.setName(dto.getName());
-        exercise.setTarget(dto.getTarget());
-        exercise.setDescription(dto.getDescription());
-
-        // Setup associations
-        exercise.setWorkout(workout);
-        List<Set> sets = dto.getSets().stream().map(set -> convertSetFromDTO(set, exercise)).toList();
-        exercise.setSets(sets);
-
-        return exercise;
+    private static Exercise convertExerciseFromDTO(ExerciseDTO dto) {
+        return Exercise.builder().exerciseId(dto.getExerciseId()).name(dto.getName()).description(dto.getDescription())
+                .target(dto.getTarget()).sets(dto.getSets().stream().map(DataConverter::convertSetFromDTO).toList())
+                .build();
     }
 
     /**
      * Converts a WorkoutDTO object into a Workout Entity object
      *
-     * @param dto     WorkoutDTO object
-     * @param program Program that the WorkoutDTO is associated with
+     * @param dto WorkoutDTO object
      * @return a Workout Entity instance
      */
-    private static Workout convertWorkoutFromDTO(WorkoutDTO dto, Program program) {
-        Workout workout = new Workout();
-        workout.setWorkoutId(dto.getWorkoutId());
-        workout.setDate(dto.getDate());
-        workout.setName(dto.getName());
-        workout.setDescription(dto.getDescription());
-
-        // Setup associations
-        workout.setProgram(program);
-        List<Exercise> exercises = dto.getExercises().stream()
-                .map(exercise -> convertExerciseFromDTO(exercise, workout)).toList();
-        workout.setExercises(exercises);
-        return workout;
+    private static Workout convertWorkoutFromDTO(WorkoutDTO dto) {
+        return Workout.builder().workoutId(dto.getWorkoutId()).date(dto.getDate()).name(dto.getName())
+                .description(dto.getDescription())
+                .exercises(dto.getExercises().stream().map(DataConverter::convertExerciseFromDTO).toList()).build();
     }
 
     /**
@@ -81,18 +60,9 @@ public class DataConverter {
      * @return a Program Entity instance
      */
     public static Program convertProgramFromDTO(UUID ownerId, ProgramDTO dto) {
-        Program program = new Program();
-        program.setProgramId(dto.getProgramId());
-        program.setOwnerId(ownerId);
-        program.setName(dto.getName());
-        program.setTags(dto.getTags());
-        program.setActive(dto.isActive());
-
-        // Setup association
-        List<Workout> workouts = dto.getWorkouts().stream().map(workout -> convertWorkoutFromDTO(workout, program))
-                .toList();
-        program.setWorkouts(workouts);
-        return program;
+        return Program.builder().programId(dto.getProgramId()).ownerId(ownerId).name(dto.getName()).tags(dto.getTags())
+                .units(dto.getUnits()).active(dto.isActive())
+                .workouts(dto.getWorkouts().stream().map(DataConverter::convertWorkoutFromDTO).toList()).build();
     }
 
     // Helper methods to convert from DAO -> DTO objects

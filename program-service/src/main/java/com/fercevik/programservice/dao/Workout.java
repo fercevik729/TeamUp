@@ -2,6 +2,7 @@ package com.fercevik.programservice.dao;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Entity(name = "workouts")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Workout {
@@ -32,12 +34,8 @@ public class Workout {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Exercise> exercises = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "program_id")
-    private Program program;
 
     @PrePersist
     protected void onCreate() {

@@ -1,6 +1,7 @@
 package com.fercevik.programservice.repositories;
 
 import com.fercevik.programservice.dao.Program;
+import com.fercevik.programservice.dao.Workout;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -42,6 +43,9 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
 
     @Query("SELECT p FROM programs p WHERE p.active = true AND p.ownerId = :ownerId")
     Optional<Program> findProgramByActive(UUID ownerId);
+
+    @Query("SELECT p.workouts FROM programs p WHERE p.programId = :programId AND p.ownerId = :ownerId")
+    List<Workout> findWorkoutsForProgram(UUID ownerId, Long programId);
 
     // UPDATE Queries
     @Modifying

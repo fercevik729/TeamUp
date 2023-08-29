@@ -3,6 +3,7 @@ package com.fercevik.programservice.dao;
 import com.fercevik.programservice.shared.WeightUnits;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
  */
 @Entity(name = "programs")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Program {
@@ -51,7 +53,7 @@ public class Program {
     @Column(name = "tags")
     private List<String> tags;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workout> workouts = new ArrayList<>();
 
     @PrePersist
