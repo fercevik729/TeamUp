@@ -17,16 +17,22 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) throws Exception {
+    public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
                 ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(ProgramAlreadyExistsException.class)
+    public final ResponseEntity<ErrorDetails> handleProgramAlreadyExistsException(Exception ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
+                ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ProgramNotFoundException.class)
-    public final ResponseEntity<ErrorDetails> handleProgramNotFoundException(Exception ex, WebRequest request)
-    throws Exception {
+    public final ResponseEntity<ErrorDetails> handleProgramNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
                 ex.getMessage(), request.getDescription(false));
 
@@ -42,7 +48,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .getFieldErrors()
                 .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList());
-
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
                 errorMsg, request.getDescription(false));
 
