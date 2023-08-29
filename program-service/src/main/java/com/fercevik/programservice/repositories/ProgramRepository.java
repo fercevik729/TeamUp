@@ -19,10 +19,14 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
      * ProgramRepository methods for app users. They all require the ownerId parameter
      * to distinguish programs
      */
+    // READ Queries
     List<Program> findProgramsByOwnerId(UUID ownerId);
 
     @Query("SELECT p FROM programs p WHERE p.programId = :programId AND p.ownerId = :ownerId")
     Optional<Program> findProgramByOwnerIdAndProgramId(UUID ownerId, Long programId);
+
+    @Query("SELECT p FROM programs p WHERE p.name LIKE :name AND p.ownerId = :ownerId")
+    Optional<Program> findProgramByName(UUID ownerId, String name);
 
     @Query("SELECT p FROM programs p WHERE p.tags IN :tags AND p.ownerId = :ownerId")
     List<Program> findProgramsByTags(UUID ownerId, List<String> tags);
@@ -39,9 +43,17 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     @Query("SELECT p FROM programs p WHERE p.active = true AND p.ownerId = :ownerId")
     Optional<Program> findProgramByActive(UUID ownerId);
 
+    // UPDATE Queries
     @Modifying
     @Transactional
     @Query("UPDATE programs p SET p.active = false WHERE p.active = true AND p.ownerId = :ownerId")
     void deactivateCurrentActiveProgram(UUID ownerId);
+
+
+    // DELETE Queries
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM programs p WHERE p.programId = :programId AND p.ownerId = :ownerId")
+    void deleteProgramByOwnerIdAndProgramId(UUID ownerId, Long programId);
 
 }

@@ -1,7 +1,6 @@
 package com.fercevik.programservice.controller;
 
 import com.fercevik.programservice.constants.KeycloakConstants;
-import com.fercevik.programservice.dao.Program;
 import com.fercevik.programservice.dto.ProgramDTO;
 import com.fercevik.programservice.services.OpaqueTokenService;
 import com.fercevik.programservice.services.ProgramService;
@@ -48,11 +47,10 @@ public class ProgramController {
 
         // Save the user's program
         UUID userId = opaqueTokenService.extractUserId(token);
-        Program saved = programService.save(userId, newProgram);
+        Long savedId = programService.createProgram(userId, newProgram);
 
         // Create response
-        URI destination = UriComponentsBuilder.fromUriString("/programs/" + saved.getProgramId().toString()).build()
-                .toUri();
+        URI destination = UriComponentsBuilder.fromUriString("/programs/" + savedId.toString()).build().toUri();
 
         return ResponseEntity.created(destination).build();
     }
@@ -64,6 +62,16 @@ public class ProgramController {
 
         UUID userId = opaqueTokenService.extractUserId(token);
         return ResponseEntity.ok(programService.getProgram(userId, programId));
+    }
+
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<Void> deleteProgram(@PathVariable Long programId, BearerTokenAuthentication token) {
+        if (!opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        UUID userId = opaqueTokenService.extractUserId(token);
+        programService.deleteProgramById(userId, programId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/active")

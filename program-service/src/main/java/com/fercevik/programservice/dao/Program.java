@@ -51,7 +51,7 @@ public class Program {
     @Column(name = "tags")
     private List<String> tags;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workout> workouts = new ArrayList<>();
 
     @PrePersist
