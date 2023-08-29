@@ -1,14 +1,23 @@
 package com.fercevik.programservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class ExerciseDTO {
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ExerciseDTO implements Serializable {
     private Long exerciseId;
     @NotEmpty(message = "name cannot be empty")
     @Size(min = 3, max = 50, message = "name must be between 3 and 50 characters long")

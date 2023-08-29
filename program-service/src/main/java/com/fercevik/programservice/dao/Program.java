@@ -3,7 +3,6 @@ package com.fercevik.programservice.dao;
 import com.fercevik.programservice.shared.WeightUnits;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +18,6 @@ import java.util.UUID;
  */
 @Entity(name = "programs")
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Program {
@@ -31,6 +29,7 @@ public class Program {
 
     @Column(name = "owner_id")
     private UUID ownerId;
+
     private String name;
 
     @Column(nullable = false)
