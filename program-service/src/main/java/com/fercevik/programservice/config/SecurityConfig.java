@@ -1,11 +1,12 @@
 package com.fercevik.programservice.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fercevik.programservice.token.CustomAuthoritiesOpaqueTokenIntrospector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -24,10 +25,15 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        http.oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(opaque -> opaque.introspectionClientCredentials(
-                properties.getClientId(), properties.getClientSecret()).introspectionUri(properties.getIntrospectionUri())));
+        http.oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(opaqueToken -> opaqueToken.introspector(myIntrospector())));
 
 
         return http.build();
+    }
+
+    @Bean
+    public OpaqueTokenIntrospector myIntrospector() {
+        return new CustomAuthoritiesOpaqueTokenIntrospector(properties.getIntrospectionUri(), properties.getClientId(),
+                properties.getClientSecret());
     }
 }

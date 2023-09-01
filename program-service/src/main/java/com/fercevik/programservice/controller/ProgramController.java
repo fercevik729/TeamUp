@@ -88,8 +88,7 @@ public class ProgramController {
     public ResponseEntity<String> echo(BearerTokenAuthentication token) {
         log.info("Got request from: " + token.getName());
         if (opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE)) {
-            return ResponseEntity.ok(
-                    "Hello Sir " + opaqueTokenService.extractUserId(token) + ", you have reached a secure endpoint");
+            return ResponseEntity.ok("you have reached a secure endpoint");
         } else if (opaqueTokenService.hasAuthority(token, KeycloakConstants.ADMIN_ROLE)) {
             return ResponseEntity.ok("HELLO MR. ADMIN");
         }
