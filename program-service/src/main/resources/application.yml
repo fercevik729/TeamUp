@@ -34,4 +34,4 @@ spring:
     password: ${postgresql.password}
 logging:
   level:
-    root: warn
+    root: trace
