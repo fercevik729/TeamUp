@@ -11,8 +11,8 @@
 	<groupId>com.fercevik</groupId>
 	<artifactId>gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>authService</name>
-	<description>Authentication microservice for TeamUp</description>
+	<name>gateway</name>
+	<description>Spring Cloud Gateway service for TeamUp</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>

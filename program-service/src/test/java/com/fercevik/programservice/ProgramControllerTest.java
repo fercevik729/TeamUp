@@ -60,11 +60,13 @@ public class ProgramControllerTest {
     }
 
     @Test
-    void givenUserIsAdmin_whenGetAllPrograms_thenUnauthorized() throws Exception {
+    void givenUserIsAdmin_whenGetAllPrograms_thenOk() throws Exception {
         var principal = UserUtils.createMockAdmin();
         System.out.println(principal.getAuthorities());
-        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk());
     }
+
+
 }
 
 class UserUtils {
@@ -81,7 +83,7 @@ class UserUtils {
     static UserInfoDTO createMockAdmin() {
         var principal = new UserInfoDTO();
         var realmRoles = new HashMap<String, List<String>>();
-        realmRoles.put("roles", List.of(KeycloakConstants.ADMIN_ROLE));
+        realmRoles.put("roles", List.of(KeycloakConstants.ADMIN_ROLE, KeycloakConstants.USER_ROLE));
         principal.setSub(UUID.randomUUID().toString());
         principal.setRealmAccess(realmRoles);
         principal.setScope("email");

@@ -31,8 +31,7 @@ public class SecurityConfig {
         http.cors(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/programs", "/programs/**").hasAuthority(KeycloakConstants.USER_ROLE)
-                .requestMatchers("/programs/echo").hasAnyAuthority(KeycloakConstants.USER_ROLE)
-                .anyRequest().authenticated());
+        );
         http.oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(opaqueToken -> opaqueToken.introspector(myIntrospector())));
 
 
