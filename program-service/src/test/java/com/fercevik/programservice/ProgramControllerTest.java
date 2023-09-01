@@ -3,23 +3,19 @@ package com.fercevik.programservice;
 
 import com.fercevik.programservice.constants.KeycloakConstants;
 import com.fercevik.programservice.controller.ProgramController;
-import com.fercevik.programservice.services.OpaqueTokenService;
 import com.fercevik.programservice.services.ProgramService;
+import com.fercevik.programservice.token.UserInfoDTO;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
-import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,24 +28,63 @@ public class ProgramControllerTest {
     @MockBean
     ProgramService programService;
 
-    @MockBean
-    OpaqueTokenService opaqueTokenService;
-
     @Autowired
     MockMvc mockMvc;
 
+
     @Test
     void givenRequestIsAnonymous_whenGetEcho_thenUnauthorized() throws Exception {
-        mockMvc.perform(get("/echo").with(anonymous())).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/programs/echo").with(anonymous())).andExpect(status().isUnauthorized());
     }
 
     @Test
     void givenUserIsAuthenticated_whenGetEcho_thenOk() throws Exception {
-        var message = "you have reached a secure endpoint";
+        var message = "You have reached a secure endpoint.";
 
-        //when(opaqueTokenService.hasAuthority(token, KeycloakConstants.USER_ROLE)).thenReturn(true);
-        mockMvc.perform(get("/echo").with(opaqueToken().authorities())).andExpect(status().isOk())
-                .andExpect(content().string(message));
+        mockMvc.perform(get("/programs/echo").with(
+                        opaqueToken().authorities(List.of(new SimpleGrantedAuthority(KeycloakConstants.USER_ROLE)))))
+                .andExpect(status().isOk()).andExpect(content().string(message));
 
+    }
+
+    @Test
+    void givenUserIsAnonymous_whenGetAllPrograms_thenUnauthorized() throws Exception {
+        mockMvc.perform(get("/programs").with(anonymous())).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void givenUserIsAuthenticated_whenGetAllPrograms_thenOk() throws Exception {
+        // Create a mock principal
+        var principal = UserUtils.createMockUser();
+        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk());
+    }
+
+    @Test
+    void givenUserIsAdmin_whenGetAllPrograms_thenUnauthorized() throws Exception {
+        var principal = UserUtils.createMockAdmin();
+        System.out.println(principal.getAuthorities());
+        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isUnauthorized());
+    }
+}
+
+class UserUtils {
+    static UserInfoDTO createMockUser() {
+        var principal = new UserInfoDTO();
+        var realmRoles = new HashMap<String, List<String>>();
+        realmRoles.put("roles", List.of(KeycloakConstants.USER_ROLE));
+        principal.setSub(UUID.randomUUID().toString());
+        principal.setRealmAccess(realmRoles);
+        principal.setScope("email");
+        return principal;
+    }
+
+    static UserInfoDTO createMockAdmin() {
+        var principal = new UserInfoDTO();
+        var realmRoles = new HashMap<String, List<String>>();
+        realmRoles.put("roles", List.of(KeycloakConstants.ADMIN_ROLE));
+        principal.setSub(UUID.randomUUID().toString());
+        principal.setRealmAccess(realmRoles);
+        principal.setScope("email");
+        return principal;
     }
 }

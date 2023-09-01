@@ -20,8 +20,10 @@ public class IntrospectionService {
      */
     public UserInfoDTO introspect(String token) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        // TODO: filter this data out of the logs
         formData.add("client_id", properties.getClientId());
         formData.add("client_secret", properties.getClientSecret());
+        formData.add("token", token);
 
         return feignClient.introspect(formData);
     }

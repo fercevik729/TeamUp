@@ -5,10 +5,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "INTROSPECTION-SERVICE", url = "http://localhost:8080")
+@FeignClient(value = "INTROSPECTION-SERVICE", url = "${keycloak.introspection-uri}")
 public interface IntrospectionClient {
 
-    @PostMapping("${keycloak.introspection.uri}")
+    @PostMapping
     UserInfoDTO introspect(@RequestBody MultiValueMap<String, String> data);
 
 }
