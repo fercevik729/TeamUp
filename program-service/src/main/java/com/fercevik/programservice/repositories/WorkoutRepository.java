@@ -1,6 +1,6 @@
 package com.fercevik.programservice.repositories;
 
-import com.fercevik.programservice.dao.Program;
+import com.fercevik.programservice.dao.Exercise;
 import com.fercevik.programservice.dao.Set;
 import com.fercevik.programservice.dao.Workout;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     @Query("SELECT w.exercises FROM workouts w WHERE w.workoutId = :workoutId")
-    List<Set> findExercisesForWorkout(Long workoutId);
+    List<Exercise> findExercisesForWorkout(Long workoutId);
 
 }

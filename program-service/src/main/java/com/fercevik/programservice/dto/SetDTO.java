@@ -17,9 +17,12 @@ import java.time.Duration;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SetDTO implements Serializable {
     private Long setId;
+
     @Min(value = 1, message = "Reps cannot be less than 1")
     private int reps;
+
     @Min(value = 1, message = "Weight cannot be less than 1")
     private double weight;
+
     private Duration duration;
 }

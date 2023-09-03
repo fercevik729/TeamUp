@@ -32,5 +32,6 @@ public class Exercise {
     private String target;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Set> sets = new ArrayList<>();
 }

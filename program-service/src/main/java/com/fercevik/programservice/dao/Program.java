@@ -35,6 +35,7 @@ public class Program {
     private String name;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean active = false;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -46,14 +47,17 @@ public class Program {
     private Date updatedAt;
 
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     private WeightUnits units = WeightUnits.POUNDS;
 
     @ElementCollection
     @CollectionTable(name = "program_tags", joinColumns = @JoinColumn(name = "program_id"))
     @Column(name = "tags")
-    private List<String> tags;
+    @Builder.Default
+    private List<String> tags = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Workout> workouts = new ArrayList<>();
 
     @PrePersist
