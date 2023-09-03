@@ -19,11 +19,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExerciseDTO implements Serializable {
     private Long exerciseId;
+
     @NotEmpty(message = "name cannot be empty")
     @Size(min = 3, max = 50, message = "name must be between 3 and 50 characters long")
     private String name;
+
     @Size(min = 3, max = 256, message = "description must be between 3 and 256 characters long")
     private String description;
+
     @Size(min = 3, max = 50, message = "target must be between 3 and 50 characters long")
     private String target;
 

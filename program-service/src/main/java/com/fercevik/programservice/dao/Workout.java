@@ -35,6 +35,7 @@ public class Workout {
     private Date date;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Exercise> exercises = new ArrayList<>();
 
     @PrePersist

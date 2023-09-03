@@ -5,7 +5,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "INTROSPECTION-SERVICE", url = "${keycloak.introspection-uri}")
+@FeignClient(value = "introspection-client", url = "${keycloak.introspection-uri}")
 public interface IntrospectionClient {
 
     @PostMapping

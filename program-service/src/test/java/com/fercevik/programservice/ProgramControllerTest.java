@@ -56,14 +56,18 @@ public class ProgramControllerTest {
     void givenUserIsAuthenticated_whenGetAllPrograms_thenOk() throws Exception {
         // Create a mock principal
         var principal = UserUtils.createMockUser();
-        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk());
+        var emptyPrograms = "[]";
+        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk())
+                .andExpect(content().string(emptyPrograms));
     }
 
     @Test
     void givenUserIsAdmin_whenGetAllPrograms_thenOk() throws Exception {
         var principal = UserUtils.createMockAdmin();
+        var emptyPrograms = "[]";
         System.out.println(principal.getAuthorities());
-        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk());
+        mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk())
+                .andExpect(content().string(emptyPrograms));
     }
 
 
