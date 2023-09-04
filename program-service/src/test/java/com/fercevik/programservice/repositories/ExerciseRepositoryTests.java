@@ -42,5 +42,9 @@ public class ExerciseRepositoryTests {
 
         var saved4 = repository.findSetsByExercise(exercise.getExerciseId());
         assert saved4.isEmpty();
+
+        var saved5 = repository.findExerciseByName("Preacher curls").orElse(null);
+        assertNotNull(saved5);
+        assertEquals(exercise, saved5);
     }
 }
