@@ -4,7 +4,7 @@ package com.fercevik.programservice;
 import com.fercevik.programservice.constants.KeycloakConstants;
 import com.fercevik.programservice.controller.ProgramController;
 import com.fercevik.programservice.services.ProgramService;
-import com.fercevik.programservice.token.UserInfoDTO;
+import com.fercevik.programservice.utils.UserUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,9 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken;
@@ -65,7 +63,6 @@ public class ProgramControllerTest {
     void givenUserIsAdmin_whenGetAllPrograms_thenOk() throws Exception {
         var principal = UserUtils.createMockAdmin();
         var emptyPrograms = "[]";
-        System.out.println(principal.getAuthorities());
         mockMvc.perform(get("/programs").with(opaqueToken().principal(principal))).andExpect(status().isOk())
                 .andExpect(content().string(emptyPrograms));
     }
@@ -73,24 +70,3 @@ public class ProgramControllerTest {
 
 }
 
-class UserUtils {
-    static UserInfoDTO createMockUser() {
-        var principal = new UserInfoDTO();
-        var realmRoles = new HashMap<String, List<String>>();
-        realmRoles.put("roles", List.of(KeycloakConstants.USER_ROLE));
-        principal.setSub(UUID.randomUUID().toString());
-        principal.setRealmAccess(realmRoles);
-        principal.setScope("email");
-        return principal;
-    }
-
-    static UserInfoDTO createMockAdmin() {
-        var principal = new UserInfoDTO();
-        var realmRoles = new HashMap<String, List<String>>();
-        realmRoles.put("roles", List.of(KeycloakConstants.ADMIN_ROLE, KeycloakConstants.USER_ROLE));
-        principal.setSub(UUID.randomUUID().toString());
-        principal.setRealmAccess(realmRoles);
-        principal.setScope("email");
-        return principal;
-    }
-}
