@@ -1,30 +1,27 @@
 package com.fercevik.programservice.repositories;
 
 import com.fercevik.programservice.dao.Exercise;
-import com.fercevik.programservice.dao.Workout;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import org.hibernate.Session;
+import com.fercevik.programservice.utils.RepoUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class WorkoutRepositoryTests {
 
     @Autowired
     private WorkoutRepository repository;
 
     @Test
-    public void testSaveAndRetrieve() {
-        Workout workout = Workout.builder().description("Leg day! :)").name("Monday").date(new Date()).build();
+    public void testSaveAndFind() {
+        var workout = RepoUtils.createWorkout();
         repository.save(workout);
 
         var saved = repository.findById(workout.getWorkoutId()).orElse(null);
@@ -36,23 +33,35 @@ public class WorkoutRepositoryTests {
         assertEquals(workout.getName(), saved.getName());
         assertEquals(workout.getDescription(), saved.getDescription());
 
-        var saved2 = repository.findWorkoutByName("Monday").orElse(null);
-        assertNotNull(saved2);
+    }
+    @Test
+    public void testSaveAndFindByName() {
+        var workout = RepoUtils.createWorkout();
+        repository.save(workout);
 
-        List<Exercise> exercises2 = repository.findExercisesForWorkout(saved2.getWorkoutId());
-        assertEquals(workout.getWorkoutId(), saved2.getWorkoutId());
+        var saved = repository.findWorkoutByName("Monday").orElse(null);
+        assertNotNull(saved);
+
+        List<Exercise> exercises2 = repository.findExercisesForWorkout(saved.getWorkoutId());
+        assertEquals(workout.getWorkoutId(), saved.getWorkoutId());
         assertEquals(workout.getExercises().stream().toList(), exercises2);
-        assertEquals(workout.getName(), saved2.getName());
-        assertEquals(workout.getDescription(), saved2.getDescription());
+        assertEquals(workout.getName(), saved.getName());
+        assertEquals(workout.getDescription(), saved.getDescription());
 
-        var saved3 = repository.findWorkoutsByDescription("Leg day! :)");
-        assert !saved3.isEmpty();
+    }
+    @Test
+    public void testSaveAndFindByDescription() {
+        var workout = RepoUtils.createWorkout();
+        repository.save(workout);
 
-        List<Exercise> exercises3 = repository.findExercisesForWorkout(saved3.get(0).getWorkoutId());
-        assertEquals(workout.getWorkoutId(), saved3.get(0).getWorkoutId());
+        var saved = repository.findWorkoutsByDescription("Leg day! :)");
+        assert !saved.isEmpty();
+
+        List<Exercise> exercises3 = repository.findExercisesForWorkout(saved.get(0).getWorkoutId());
+        assertEquals(workout.getWorkoutId(), saved.get(0).getWorkoutId());
         assertEquals(workout.getExercises().stream().toList(), exercises3);
-        assertEquals(workout.getName(), saved3.get(0).getName());
-        assertEquals(workout.getDescription(), saved3.get(0).getDescription());
+        assertEquals(workout.getName(), saved.get(0).getName());
+        assertEquals(workout.getDescription(), saved.get(0).getDescription());
     }
 
 }
