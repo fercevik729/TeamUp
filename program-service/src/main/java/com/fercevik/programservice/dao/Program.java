@@ -29,7 +29,7 @@ public class Program {
     @Column(name = "program_id")
     private Long programId;
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
     private String name;
@@ -50,7 +50,7 @@ public class Program {
     @Builder.Default
     private WeightUnits units = WeightUnits.POUNDS;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "program_tags", joinColumns = @JoinColumn(name = "program_id"))
     @Column(name = "tags")
     @Builder.Default
