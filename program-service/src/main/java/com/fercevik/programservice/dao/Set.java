@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * Entity model that represents exercise sets
@@ -24,9 +25,8 @@ public class Set {
     @Column(name = "set_id")
     private Long setId;
 
-    private int setNumber;
-    private int reps;
-    private double weight;
+    private Integer setNumber;
+    private Integer reps;
+    private Double weight;
     private Duration duration;
-
 }

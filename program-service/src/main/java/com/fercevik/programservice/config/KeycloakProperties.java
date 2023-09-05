@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "keycloak")
 public class KeycloakProperties {
-    private String host;
-    private String realm;
-    private String clientId;
-    private String clientSecret;
-    private String username;
-    private String password;
-    private String introspectionUri;
+    private String host = "unset";
+    private String realm = "unset";
+    private String clientId = "unset";
+    private String clientSecret = "unset";
+    private String username = "unset";
+    private String password = "unset";
+    private String introspectionUri = "unset";
 }
