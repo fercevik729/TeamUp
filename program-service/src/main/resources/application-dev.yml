@@ -26,7 +26,7 @@ spring:
       kv:
         enabled: true
   config:
-    import: vault://
+    import: optional:vault://
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/programs
