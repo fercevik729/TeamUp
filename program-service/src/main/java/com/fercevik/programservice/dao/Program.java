@@ -29,7 +29,7 @@ public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "program_id")
-    private Long programId;
+    private long programId;
 
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;

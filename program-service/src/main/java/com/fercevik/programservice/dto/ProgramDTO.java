@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProgramDTO implements Serializable {
-    private Long programId;
+    private long programId;
 
     @NotEmpty(message = "name cannot be empty")
     @Size(min = 3, max = 50, message = "name must be between 3 and 50 characters long")

@@ -24,8 +24,8 @@ public class DataConverter {
      * @param dto SetDTO object
      * @return a Set Entity instance
      */
-    private static Set convertSetFromDTO(SetDTO dto) {
-        return Set.builder().weight(dto.getWeight()).duration(dto.getDuration()).reps(dto.getReps()).build();
+    public static Set convertSetFromDTO(SetDTO dto) {
+        return Set.builder().setId(dto.getSetId()).weight(dto.getWeight()).duration(dto.getDuration()).reps(dto.getReps()).build();
     }
 
     /**
@@ -34,7 +34,7 @@ public class DataConverter {
      * @param dto ExerciseDTO object
      * @return an Exercise Entity instance
      */
-    private static Exercise convertExerciseFromDTO(ExerciseDTO dto) {
+    public static Exercise convertExerciseFromDTO(ExerciseDTO dto) {
         return Exercise.builder().exerciseId(dto.getExerciseId()).name(dto.getName()).description(dto.getDescription())
                 .target(dto.getTarget()).sets(dto.getSets().stream().map(DataConverter::convertSetFromDTO).toList())
                 .build();
@@ -46,7 +46,7 @@ public class DataConverter {
      * @param dto WorkoutDTO object
      * @return a Workout Entity instance
      */
-    private static Workout convertWorkoutFromDTO(WorkoutDTO dto) {
+    public static Workout convertWorkoutFromDTO(WorkoutDTO dto) {
         return Workout.builder().workoutId(dto.getWorkoutId()).date(dto.getDate()).name(dto.getName())
                 .description(dto.getDescription())
                 .exercises(dto.getExercises().stream().map(DataConverter::convertExerciseFromDTO).toList()).build();
@@ -73,7 +73,7 @@ public class DataConverter {
      * @param set Set entity object
      * @return a new SetDTO object
      */
-    private static SetDTO convertDTOFromSet(Set set) {
+    public static SetDTO convertDTOFromSet(Set set) {
         return SetDTO.builder().setId(set.getSetId()).weight(set.getWeight()).duration(set.getDuration())
                 .reps(set.getReps()).build();
     }
@@ -84,7 +84,7 @@ public class DataConverter {
      * @param exercise Exercise entity object
      * @return a new ExerciseDTO object
      */
-    private static ExerciseDTO convertDTOFromExercise(Exercise exercise) {
+    public static ExerciseDTO convertDTOFromExercise(Exercise exercise) {
         return ExerciseDTO.builder().exerciseId(exercise.getExerciseId()).description(exercise.getDescription())
                 .name(exercise.getName()).target(exercise.getTarget())
                 .sets(exercise.getSets().stream().map(DataConverter::convertDTOFromSet).toList()).build();
@@ -96,7 +96,7 @@ public class DataConverter {
      * @param workout Workout entity object
      * @return a new WorkoutDTO object
      */
-    private static WorkoutDTO convertDTOFromWorkout(Workout workout) {
+    public static WorkoutDTO convertDTOFromWorkout(Workout workout) {
         return WorkoutDTO.builder().workoutId(workout.getWorkoutId()).description(workout.getDescription())
                 .name(workout.getName()).date(workout.getDate())
                 .exercises(workout.getExercises().stream().map(DataConverter::convertDTOFromExercise).toList()).build();

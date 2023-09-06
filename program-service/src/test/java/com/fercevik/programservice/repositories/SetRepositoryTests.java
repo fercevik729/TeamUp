@@ -23,7 +23,7 @@ public class SetRepositoryTests {
 
     @Test
     public void testSaveAndRetrieve() {
-        Set set = Set.builder().setNumber(1).reps(12).weight(32.5).duration(Duration.ofSeconds(60)).build();
+        Set set = Set.builder().setId(1L).reps(12).weight(32.5).duration(Duration.ofSeconds(60)).build();
         repository.save(set);
 
         Set savedSet = repository.findById(set.getSetId()).orElse(null);

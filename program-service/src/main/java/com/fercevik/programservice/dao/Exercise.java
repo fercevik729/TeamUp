@@ -26,7 +26,7 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "exercise_id")
-    private Long exerciseId;
+    private long exerciseId;
 
     private String name;
     private String description;
