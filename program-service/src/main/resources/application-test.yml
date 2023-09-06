@@ -1,0 +1,25 @@
+keycloak:
+  password: test_password
+  host: test_host
+  introspection-uri: test_uri
+  client-id: test_client_id
+  client-secret: test_client_secret
+spring:
+  application:
+    name: program-service
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: test_db_username
+    password: test_db_password
+  config:
+    import: optional:vault://
+logging:
+  level:
+    root: info
+server:
+  port: 8082

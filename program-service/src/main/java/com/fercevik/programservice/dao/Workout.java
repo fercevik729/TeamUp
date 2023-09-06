@@ -34,12 +34,9 @@ public class Workout {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Exercise> exercises = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "program_id")
-    private Program program;
 
     @PrePersist
     protected void onCreate() {

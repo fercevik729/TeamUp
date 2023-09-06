@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entity model that represents exercises.
@@ -28,15 +29,10 @@ public class Exercise {
     private Long exerciseId;
 
     private String name;
-
     private String description;
-
     private String target;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Set> sets = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "workout_id", nullable = false)
-    private Workout workout;
 }

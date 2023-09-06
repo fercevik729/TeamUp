@@ -1,93 +1,96 @@
 package com.fercevik.programservice.services;
 
-import com.fercevik.programservice.dao.Exercise;
 import com.fercevik.programservice.dao.Program;
-import com.fercevik.programservice.dao.Set;
-import com.fercevik.programservice.dao.Workout;
-import com.fercevik.programservice.dto.ExerciseDTO;
 import com.fercevik.programservice.dto.ProgramDTO;
-import com.fercevik.programservice.dto.SetDTO;
-import com.fercevik.programservice.dto.WorkoutDTO;
+import com.fercevik.programservice.exceptions.ActiveProgramNotFoundException;
+import com.fercevik.programservice.exceptions.ProgramAlreadyExistsException;
+import com.fercevik.programservice.exceptions.ProgramNotFoundException;
 import com.fercevik.programservice.repositories.ProgramRepository;
-import com.fercevik.programservice.repositories.WorkoutRepository;
+import com.fercevik.programservice.shared.DataConverter;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @Service
+@Slf4j
 public class ProgramService {
     private final ProgramRepository programRepository;
-    private final WorkoutRepository workoutRepository;
-
-    public List<Program> getUserPrograms(UUID ownerId) {
-        return programRepository.findProgramsByOwnerId(ownerId);
-    }
-
-    public Program getActiveProgram(UUID ownerId) {
-        return programRepository.findProgramByActive(ownerId);
-    }
-
-    public Program getProgram(UUID ownerId, Long programId) {
-        return programRepository.findProgramByOwnerIdAndProgramId(ownerId, programId);
-    }
-
-    public Program save(UUID userId, ProgramDTO dto) {
-        var program = convertProgramFromDTO(userId, dto);
-        return programRepository.save(program);
-    }
-
-    // Private methods to convert from DTO to DAO objects
-    // TODO: setup associations between objects if needed
 
     /**
-     * Converts a SetDTO object into a Set Entity object
+     * Retrieves all the programs for a user
      *
-     * @param dto SetDTO object
-     * @return a Set Entity instance
+     * @param ownerId UUID of the owner creating the program
+     * @return list of ProgramDTO instances containing the program data
      */
-    private Set convertSetFromDTO(SetDTO dto) {
-        return Set.builder().setId(dto.getSetId()).weight(dto.getWeight()).duration(dto.getDuration())
-                .reps(dto.getReps()).setNumber(dto.getSetNumber()).build();
+    public List<ProgramDTO> getUserPrograms(UUID ownerId) {
+        return programRepository.findProgramsByOwnerId(ownerId).stream().map(DataConverter::convertDTOFromProgram)
+                .toList();
     }
 
     /**
-     * Converts an ExerciseDTO object into an Exercise Entity object
+     * Retrieves the currently active program if it exists for a user
      *
-     * @param dto ExerciseDTO object
-     * @return an Exercise Entity instance
+     * @param ownerId UUID of the owner creating the program
+     * @return ProgramDTO instance containing the program data
      */
-    private Exercise convertExerciseFromDTO(ExerciseDTO dto) {
-        return Exercise.builder().exerciseId(dto.getExerciseId()).name(dto.getName()).target(dto.getTarget())
-                .description(dto.getDescription())
-                .sets(dto.getSets().stream().map(this::convertSetFromDTO).collect(Collectors.toList())).build();
+    public ProgramDTO getActiveProgram(UUID ownerId) {
+        return programRepository.findProgramByActive(ownerId).map(DataConverter::convertDTOFromProgram).orElseThrow(
+                () -> new ActiveProgramNotFoundException(
+                        "no active program could be found for user"));
     }
 
     /**
-     * Converts a WorkoutDTO object into a Workout Entity object
+     * Retrieves a program if one exists for a user with the specified program id
      *
-     * @param dto WorkoutDTO object
-     * @return a Workout Entity instance
+     * @param ownerId UUID of the owner creating the program
+     * @param programId program id
+     * @return ProgramDTO instance containing the program data
      */
-    private Workout convertWorkoutFromDTO(WorkoutDTO dto) {
-        return Workout.builder().workoutId(dto.getWorkoutId()).date(dto.getDate()).description(dto.getDescription())
-                .exercises(dto.getExercises().stream().map(this::convertExerciseFromDTO).collect(Collectors.toList()))
-                .name(dto.getName()).build();
+    public ProgramDTO getProgram(UUID ownerId, Long programId) {
+        return programRepository.findProgramByOwnerIdAndProgramId(ownerId, programId)
+                .map(DataConverter::convertDTOFromProgram).orElseThrow(() -> new ProgramNotFoundException(
+                        "program with id: " + programId + " and ownerId: " + ownerId + " could not be found"));
     }
 
     /**
-     * Converts a ProgramDTO object into a Program Entity object
+     * Creates a new program if one with the same id or name doesn't already exist
      *
-     * @param dto ProgramDTO object
-     * @return a Program Entity instance
+     * @param ownerId UUID of the owner creating the program
+     * @param dto data transfer object containing the Program
+     * @return new program's id
      */
-    private Program convertProgramFromDTO(UUID ownerId, ProgramDTO dto) {
-        return Program.builder().ownerId(ownerId).programId(dto.getProgramId()).name(dto.getName()).tags(dto.getTags())
-                .active(dto.isActive())
-                .workouts(dto.getWorkouts().stream().map(this::convertWorkoutFromDTO).collect(Collectors.toList()))
-                .build();
+    public Long createProgram(UUID ownerId, ProgramDTO dto) {
+        var program = DataConverter.convertProgramFromDTO(ownerId, dto);
+        // Check id's
+        Optional<Program> res = programRepository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
+        if (res.isPresent())
+            throw new ProgramAlreadyExistsException("program with the same id already exists");
+
+        // Check name
+        res = programRepository.findProgramByName(ownerId, program.getName());
+        if (res.isPresent())
+            throw new ProgramAlreadyExistsException("program with the same name already exists for this user");
+
+        // Create the program
+        return saveProgram(program);
     }
+
+    /**
+     * Deletes a program owned by a particular user with the specified program id
+     * @param ownerId UUID of the owner creating the program
+     * @param programId program id
+     */
+    public void deleteProgramById(UUID ownerId, Long programId) {
+        programRepository.deleteProgramByOwnerIdAndProgramId(ownerId, programId);
+    }
+
+    public Long saveProgram(Program program) {
+        return programRepository.save(program).getProgramId();
+    }
+
 }

@@ -1,11 +1,14 @@
 package com.fercevik.programservice.dao;
 
+import com.fercevik.programservice.shared.WeightUnits;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,37 +31,45 @@ public class Program {
     @Column(name = "program_id")
     private Long programId;
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
+
     private String name;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean active = false;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    @ElementCollection
+    @Enumerated(value = EnumType.STRING)
+    @Builder.Default
+    private WeightUnits units = WeightUnits.POUNDS;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "program_tags", joinColumns = @JoinColumn(name = "program_id"))
     @Column(name = "tags")
-    private List<String> tags;
+    @Builder.Default
+    private List<String> tags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Workout> workouts = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = createdAt;
+        createdAt = LocalDate.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = new Date();
+        updatedAt = LocalDateTime.now();
     }
 }

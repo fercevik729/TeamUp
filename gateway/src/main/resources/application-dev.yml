@@ -17,7 +17,7 @@ spring:
       kv:
         enabled: true
   config:
-    import: vault://
+    import: optional:vault://
   security:
     oauth2:
       client:
