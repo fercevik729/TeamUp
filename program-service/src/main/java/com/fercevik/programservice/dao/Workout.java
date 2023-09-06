@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,8 +31,8 @@ public class Workout {
     private String name;
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    @Temporal(TemporalType.DATE)
+    private LocalDate date;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -40,11 +40,6 @@ public class Workout {
 
     @PrePersist
     protected void onCreate() {
-        date = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        date = new Date();
+        date = LocalDate.now();
     }
 }

@@ -4,8 +4,8 @@ import com.fercevik.programservice.dao.Exercise;
 import com.fercevik.programservice.dao.Program;
 import com.fercevik.programservice.dao.Workout;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public class RepoUtils {
     }
 
     public static Workout createWorkout() {
-        return Workout.builder().description("Leg day! :)").name("Monday").date(new Date()).build();
+        return Workout.builder().description("Leg day! :)").name("Monday").date(LocalDate.now()).build();
     }
 
     public static Exercise createExercise() {

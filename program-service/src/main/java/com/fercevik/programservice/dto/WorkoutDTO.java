@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class WorkoutDTO implements Serializable {
 
     @Size(min = 3, max = 256, message = "description must be between 3 and 256 characters long")
     private String description;
-    private Date date;
+    private LocalDate date;
 
     @Valid
     @NotEmpty(message = "exercises cannot be empty")
