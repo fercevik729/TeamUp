@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExerciseDTO implements Serializable {
-    private Long exerciseId;
+    private long exerciseId;
 
     @NotEmpty(message = "name cannot be empty")
     @Size(min = 3, max = 50, message = "name must be between 3 and 50 characters long")

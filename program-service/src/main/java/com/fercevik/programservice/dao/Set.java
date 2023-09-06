@@ -23,10 +23,9 @@ public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "set_id")
-    private Long setId;
+    private long setId;
 
-    private Integer setNumber;
-    private Integer reps;
-    private Double weight;
+    private int reps;
+    private double weight;
     private Duration duration;
 }
