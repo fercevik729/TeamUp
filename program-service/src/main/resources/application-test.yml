@@ -20,6 +20,6 @@ spring:
     import: optional:vault://
 logging:
   level:
-    root: warn
+    root: info
 server:
   port: 8082
