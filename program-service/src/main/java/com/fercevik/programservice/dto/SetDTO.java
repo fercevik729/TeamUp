@@ -16,7 +16,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SetDTO implements Serializable {
-    private Long setId;
+    private long setId;
 
     @Min(value = 1, message = "Reps cannot be less than 1")
     private int reps;

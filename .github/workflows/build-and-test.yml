@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run program-service Tests
+      - name: Run Tests
         env:
           SPRING_PROFILES_ACTIVE: test
-        run: cd program-service && mvn -B clean test
+        run: mvn -B clean verify

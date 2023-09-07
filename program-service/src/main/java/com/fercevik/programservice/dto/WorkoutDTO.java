@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkoutDTO implements Serializable {
-    private Long workoutId;
+    private long workoutId;
 
     @NotEmpty(message = "name cannot be empty")
     @Size(min = 3, max = 50, message = "name must be between 3 and 50 characters long")
@@ -27,7 +28,7 @@ public class WorkoutDTO implements Serializable {
 
     @Size(min = 3, max = 256, message = "description must be between 3 and 256 characters long")
     private String description;
-    private Date date;
+    private LocalDate date;
 
     @Valid
     @NotEmpty(message = "exercises cannot be empty")
