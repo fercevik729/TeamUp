@@ -1,13 +1,20 @@
 package com.fercevik.programservice.shared;
 
 import com.fercevik.programservice.utils.ConverterUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DataConverterTests {
+
+    @Test
+    public void testConstructor() {
+        assertThrows(AssertionError.class, DataConverter::new);
+    }
     @Test
     public void testConvertSetFromDTO() {
         var setDTO = ConverterUtils.createSetDTO();

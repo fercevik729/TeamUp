@@ -14,7 +14,11 @@ import java.util.UUID;
 /**
  * Utility class that converts DTO -> DAO and vice versa
  */
-public class DataConverter {
+public final class DataConverter {
+
+    DataConverter() {
+        throw new AssertionError("Utility class, do not instantiate");
+    }
 
     // Helper methods to convert from DTO -> DAO
 
