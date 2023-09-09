@@ -3,6 +3,7 @@ package com.fercevik.programservice.services;
 import com.fercevik.programservice.dao.Program;
 import com.fercevik.programservice.dto.ProgramDTO;
 import com.fercevik.programservice.exceptions.ActiveProgramNotFoundException;
+import com.fercevik.programservice.exceptions.ProgramAlreadyExistsException;
 import com.fercevik.programservice.exceptions.ProgramNotFoundException;
 import com.fercevik.programservice.repositories.ProgramRepository;
 import com.fercevik.programservice.shared.DataConverter;
@@ -97,20 +98,34 @@ public class ProgramServiceTests {
         assert programService.deleteProgramById(ownerId, programId) > 0;
     }
 
-    // Not passing
-    /*
     @Test
     void testCreateProgram() {
         UUID ownerId = UUID.randomUUID();
         ProgramDTO data = ConverterUtils.createProgramDTO();
-
-        System.out.println(data.getProgramId());
+        Program program = DataConverter.convertProgramFromDTO(ownerId, data);
 
         Mockito.when(repository.findProgramByOwnerIdAndProgramId(ownerId, data.getProgramId())).thenReturn(Optional.empty());
         Mockito.when(repository.findProgramByName(ownerId, data.getName())).thenReturn(Optional.empty());
+        Mockito.when(repository.save(program)).thenReturn(program);
         long actual = programService.createProgram(ownerId, data);
         assertEquals(data.getProgramId(), actual);
     }
-     */
 
+    @Test
+    void testCreateProgramSameIdExists() {
+        UUID ownerId = UUID.randomUUID();
+        ProgramDTO data = ConverterUtils.createProgramDTO();
+        Program program = DataConverter.convertProgramFromDTO(ownerId, data);
+        Mockito.when(repository.findProgramByOwnerIdAndProgramId(ownerId, data.getProgramId())).thenReturn(Optional.of(program));
+        assertThrows(ProgramAlreadyExistsException.class, () -> programService.createProgram(ownerId, data));
+    }
+    @Test
+    void testCreateProgramSameNameExists() {
+        UUID ownerId = UUID.randomUUID();
+        ProgramDTO data = ConverterUtils.createProgramDTO();
+        Program program = DataConverter.convertProgramFromDTO(ownerId, data);
+        Mockito.when(repository.findProgramByOwnerIdAndProgramId(ownerId, data.getProgramId())).thenReturn(Optional.empty());
+        Mockito.when(repository.findProgramByName(ownerId, data.getName())).thenReturn(Optional.of(program));
+        assertThrows(ProgramAlreadyExistsException.class, () -> programService.createProgram(ownerId, data));
+    }
 }

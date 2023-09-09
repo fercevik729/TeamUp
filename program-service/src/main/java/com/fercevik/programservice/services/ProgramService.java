@@ -10,6 +10,7 @@ import com.fercevik.programservice.shared.DataConverter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,7 @@ public class ProgramService {
      * @param dto data transfer object containing the Program
      * @return new program's id
      */
+    @Transactional
     public long createProgram(UUID ownerId, ProgramDTO dto) {
         var program = DataConverter.convertProgramFromDTO(ownerId, dto);
         // Check id's
@@ -77,11 +79,11 @@ public class ProgramService {
             throw new ProgramAlreadyExistsException("program with the same name already exists for this user");
 
         // Create the program
-        programRepository.saveAndFlush(program);
-        Program saved = programRepository.findProgramByName(ownerId, program.getName()).orElse(null);
-        assert saved != null;
+        Program saved = programRepository.save(program);
         return saved.getProgramId();
     }
+
+    // TODO: add update method
 
     /**
      * Deletes a program owned by a particular user with the specified program id
