@@ -83,6 +83,19 @@ public class ProgramService {
         return saved.getProgramId();
     }
 
+    @Transactional
+    public long updateProgram(UUID ownerId, ProgramDTO dto) {
+        var program = DataConverter.convertProgramFromDTO(ownerId, dto);
+        var programId = program.getProgramId();
+        // Check if that program exists
+        Optional<Program> res = programRepository.findProgramByOwnerIdAndProgramId(ownerId, programId);
+        if (res.isEmpty())
+            throw new ProgramNotFoundException("program with id="+programId+" doesn't exist");
+        // Update it if it does
+        return programRepository.save(program).getProgramId();
+
+    }
+
     // TODO: add update method
 
     /**

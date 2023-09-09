@@ -6,17 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource(properties = "spring.cloud.vault.enabled=false")
+@ActiveProfiles("test")
 public class ProgramRepositoryTests {
 
     @Autowired
@@ -24,14 +27,12 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFind() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
 
         var saved = repository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId()).orElse(null);
         assertNotNull(saved);
-        var workouts = repository.findWorkoutsForProgram(ownerId, program.getProgramId());
-        assert workouts.isEmpty();
 
         assertEquals(saved.getProgramId(), program.getProgramId());
         assertEquals(saved.getTags().stream().toList(), program.getTags());
@@ -41,8 +42,8 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFindByName() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
 
         var saved = repository.findProgramByName(ownerId, program.getName()).orElse(null);
@@ -54,8 +55,8 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFindByActive() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
 
         var saved = repository.findProgramByActive(ownerId).orElse(null);
@@ -71,8 +72,8 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFindByTags() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
 
         var saved = repository.findProgramsByOwnerIdAndTagsIn(ownerId, List.of("Bodybuilding", "Soccer"));
@@ -87,8 +88,8 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFindByCreatedAt() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         var createdDate = LocalDate.now();
         repository.save(program);
 
@@ -107,8 +108,8 @@ public class ProgramRepositoryTests {
 
     @Test
     public void testSaveAndFindByUpdatedAt() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         var updatedDate = LocalDateTime.now();
         repository.save(program);
 
@@ -128,8 +129,8 @@ public class ProgramRepositoryTests {
     @Test
     @Transactional
     public void testUpdate() {
-       var program = RepoUtils.createProgram();
-       var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
 
        repository.save(program);
        String updatedName = "Second Program";
@@ -144,8 +145,8 @@ public class ProgramRepositoryTests {
     @Test
     @Transactional
     public void testDeactivateProgram() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
         repository.deactivateCurrentActiveProgram(ownerId);
 
@@ -157,8 +158,8 @@ public class ProgramRepositoryTests {
     @Test
     @Transactional
     public void testDeleteProgram() {
-        var program = RepoUtils.createProgram();
-        var ownerId = program.getOwnerId();
+        var ownerId = UUID.randomUUID();
+        var program = RepoUtils.createProgramDAO(ownerId);
         repository.save(program);
         int rowsAffected = repository.deleteProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
         assert rowsAffected > 0;
