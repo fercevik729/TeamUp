@@ -64,7 +64,7 @@ public class ProgramService {
      * @param dto data transfer object containing the Program
      * @return new program's id
      */
-    public Long createProgram(UUID ownerId, ProgramDTO dto) {
+    public long createProgram(UUID ownerId, ProgramDTO dto) {
         var program = DataConverter.convertProgramFromDTO(ownerId, dto);
         // Check id's
         Optional<Program> res = programRepository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
@@ -77,20 +77,20 @@ public class ProgramService {
             throw new ProgramAlreadyExistsException("program with the same name already exists for this user");
 
         // Create the program
-        return saveProgram(program);
+        programRepository.saveAndFlush(program);
+        Program saved = programRepository.findProgramByName(ownerId, program.getName()).orElse(null);
+        assert saved != null;
+        return saved.getProgramId();
     }
 
     /**
      * Deletes a program owned by a particular user with the specified program id
      * @param ownerId UUID of the owner creating the program
      * @param programId program id
+     * @return rows affected
      */
-    public void deleteProgramById(UUID ownerId, Long programId) {
-        programRepository.deleteProgramByOwnerIdAndProgramId(ownerId, programId);
-    }
-
-    public Long saveProgram(Program program) {
-        return programRepository.save(program).getProgramId();
+    public int deleteProgramById(UUID ownerId, Long programId) {
+        return programRepository.deleteProgramByOwnerIdAndProgramId(ownerId, programId);
     }
 
 }

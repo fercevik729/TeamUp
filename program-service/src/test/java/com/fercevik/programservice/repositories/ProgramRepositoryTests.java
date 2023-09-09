@@ -160,7 +160,8 @@ public class ProgramRepositoryTests {
         var program = RepoUtils.createProgram();
         var ownerId = program.getOwnerId();
         repository.save(program);
-        repository.deleteProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
+        int rowsAffected = repository.deleteProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
+        assert rowsAffected > 0;
 
         var deletedProgram = repository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId()).orElse(null);
         assertNull(deletedProgram);
