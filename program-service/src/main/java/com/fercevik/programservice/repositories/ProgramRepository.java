@@ -56,6 +56,6 @@ public interface ProgramRepository extends JpaRepository<Program, Long> {
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("DELETE FROM programs p WHERE p.programId = :programId AND p.ownerId = :ownerId")
-    void deleteProgramByOwnerIdAndProgramId(UUID ownerId, Long programId);
+    int deleteProgramByOwnerIdAndProgramId(UUID ownerId, Long programId);
 
 }
