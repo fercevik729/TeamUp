@@ -1,5 +1,8 @@
 package com.fercevik.programservice.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fercevik.programservice.dao.Exercise;
 import com.fercevik.programservice.dao.Program;
 import com.fercevik.programservice.dao.Set;
@@ -54,5 +57,11 @@ public class RepoUtils {
         return Program.builder().programId(1).active(true).tags(List.of("Bodybuilding", "Fitness", "Beginner"))
                 .ownerId(ownerId).workouts(List.of(RepoUtils.createWorkoutDAO())).units(WeightUnits.KILOGRAMS)
                 .name("Program for Beginner Clients").build();
+    }
+
+    public static String asJSONStr(Object o) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.writeValueAsString(o);
     }
 }

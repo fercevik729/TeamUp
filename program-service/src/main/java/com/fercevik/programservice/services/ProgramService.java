@@ -96,8 +96,6 @@ public class ProgramService {
 
     }
 
-    // TODO: add update method
-
     /**
      * Deletes a program owned by a particular user with the specified program id
      * @param ownerId UUID of the owner creating the program
