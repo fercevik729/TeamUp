@@ -2,12 +2,15 @@ package com.fercevik.programservice.services;
 
 import com.fercevik.programservice.dao.Program;
 import com.fercevik.programservice.dto.ProgramDTO;
+import com.fercevik.programservice.dto.WorkoutDTO;
 import com.fercevik.programservice.exceptions.ActiveProgramNotFoundException;
 import com.fercevik.programservice.exceptions.ProgramAlreadyExistsException;
 import com.fercevik.programservice.exceptions.ProgramNotFoundException;
+import com.fercevik.programservice.exceptions.WorkoutNotFoundException;
 import com.fercevik.programservice.repositories.ProgramRepository;
 import com.fercevik.programservice.shared.DataConverter;
 import com.fercevik.programservice.utils.RepoUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -150,5 +154,23 @@ public class ProgramServiceTests {
         Mockito.when(repository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId()))
                 .thenReturn(Optional.empty());
         assertThrows(ProgramNotFoundException.class, () -> programService.updateProgram(ownerId, data));
+    }
+
+    @Test
+    void testGetAllWorkoutsForProgram() {
+        UUID ownerId = UUID.randomUUID();
+        Program data = RepoUtils.createProgramDAO(ownerId);
+        Mockito.when(repository.findWorkoutsForProgram(ownerId, data.getProgramId())).thenReturn(data.getWorkouts());
+        List<WorkoutDTO> expected = data.getWorkouts().stream().map(DataConverter::convertDTOFromWorkout).toList();
+        List<WorkoutDTO> actual = programService.getAllWorkoutsForProgram(ownerId, data.getProgramId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetAllWorkoutsForInvalidProgram() {
+        UUID ownerId = UUID.randomUUID();
+        long invalidId = 1L;
+        Mockito.when(repository.findWorkoutsForProgram(ownerId, invalidId)).thenReturn(new ArrayList<>());
+        assertThrows(WorkoutNotFoundException.class, () -> programService.getAllWorkoutsForProgram(ownerId, invalidId));
     }
 }

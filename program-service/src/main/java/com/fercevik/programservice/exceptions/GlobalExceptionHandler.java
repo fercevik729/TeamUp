@@ -18,38 +18,37 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
-                ex.getMessage(), request.getDescription(false));
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
+                request.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ProgramAlreadyExistsException.class)
     public final ResponseEntity<ErrorDetails> handleProgramAlreadyExistsException(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
-                ex.getMessage(), request.getDescription(false));
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
+                request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ProgramNotFoundException.class)
+    @ExceptionHandler({ProgramNotFoundException.class, WorkoutNotFoundException.class})
     public final ResponseEntity<ErrorDetails> handleProgramNotFoundException(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
-                ex.getMessage(), request.getDescription(false));
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
+                request.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 
     }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status, WebRequest request) {
+                                                                  HttpHeaders headers, HttpStatusCode status,
+                                                                  WebRequest request) {
 
-        String errorMsg = String.join(",", ex.getBindingResult()
-                .getFieldErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .toList());
-        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
-                errorMsg, request.getDescription(false));
+        String errorMsg = String.join(",",
+                ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
+                        .toList());
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), errorMsg, request.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

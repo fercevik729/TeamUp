@@ -23,6 +23,19 @@ public class ProgramController {
 
 
     // CRUD Operations for User programs
+    @PostMapping
+    public ResponseEntity<String> createProgram(@Valid @RequestBody ProgramDTO newProgram,
+                                                @User String userId) {
+
+        // Save the user's program
+        long savedId = programService.createProgram(UUID.fromString(userId), newProgram);
+
+        // Create response
+        URI destination = UriComponentsBuilder.fromUriString("/programs/" + savedId).build().toUri();
+
+        return ResponseEntity.created(destination).build();
+    }
+
     @GetMapping
     public ResponseEntity<List<ProgramDTO>> getAllPrograms(@User String userId) {
         // Get all the programs this user owns
@@ -30,22 +43,25 @@ public class ProgramController {
 
     }
 
-    @PostMapping
-    public ResponseEntity<String> createProgram(@Valid @RequestBody ProgramDTO newProgram,
-                                                @User String userId) {
-
-        // Save the user's program
-        Long savedId = programService.createProgram(UUID.fromString(userId), newProgram);
-
-        // Create response
-        URI destination = UriComponentsBuilder.fromUriString("/programs/" + savedId.toString()).build().toUri();
-
-        return ResponseEntity.created(destination).build();
-    }
-
     @GetMapping("/{programId}")
     public ResponseEntity<ProgramDTO> getProgram(@PathVariable Long programId, @User String userId) {
         return ResponseEntity.ok(programService.getProgram(UUID.fromString(userId), programId));
+    }
+
+    @GetMapping
+    public ResponseEntity<ProgramDTO> getProgramsByName(@RequestParam String name, @User String userId) {
+       return ResponseEntity.ok(programService.getProgramByName(UUID.fromString(userId), name));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProgramDTO>> getProgramsByTags(@RequestParam String[] tags, @User String userId) {
+        return ResponseEntity.ok(programService.getProgramsByTags(UUID.fromString(userId), tags));
+    }
+
+    @PatchMapping("/{programId}/activate")
+    public ResponseEntity<Void> activateProgram(@PathVariable long programId, @User String userId) {
+        programService.activateProgram(UUID.fromString(userId), programId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{programId}")
