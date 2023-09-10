@@ -20,11 +20,11 @@ import java.util.UUID;
 
 public class RepoUtils {
     public static SetDTO createSetDTO() {
-        return SetDTO.builder().setId(1).duration(Duration.ofSeconds(20)).weight(15).reps(12).build();
+        return SetDTO.builder().setId(1).duration(20).weight(15).reps(12).build();
     }
 
     public static Set createSetDAO() {
-        return Set.builder().setId(1).duration(Duration.ofSeconds(20)).weight(15).reps(12).build();
+        return Set.builder().setId(1).duration(20).weight(15).reps(12).build();
     }
 
     public static ExerciseDTO createExerciseDTO() {
