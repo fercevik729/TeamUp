@@ -1,5 +1,6 @@
 package com.fercevik.programservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,6 +29,8 @@ public class WorkoutDTO implements Serializable {
 
     @Size(min = 3, max = 256, message = "description must be between 3 and 256 characters long")
     private String description;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     @Valid

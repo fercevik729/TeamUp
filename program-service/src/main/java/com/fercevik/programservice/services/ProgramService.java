@@ -10,6 +10,7 @@ import com.fercevik.programservice.shared.DataConverter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +65,8 @@ public class ProgramService {
      * @param dto data transfer object containing the Program
      * @return new program's id
      */
-    public Long createProgram(UUID ownerId, ProgramDTO dto) {
+    @Transactional
+    public long createProgram(UUID ownerId, ProgramDTO dto) {
         var program = DataConverter.convertProgramFromDTO(ownerId, dto);
         // Check id's
         Optional<Program> res = programRepository.findProgramByOwnerIdAndProgramId(ownerId, program.getProgramId());
@@ -77,20 +79,31 @@ public class ProgramService {
             throw new ProgramAlreadyExistsException("program with the same name already exists for this user");
 
         // Create the program
-        return saveProgram(program);
+        Program saved = programRepository.save(program);
+        return saved.getProgramId();
+    }
+
+    @Transactional
+    public long updateProgram(UUID ownerId, ProgramDTO dto) {
+        var program = DataConverter.convertProgramFromDTO(ownerId, dto);
+        var programId = program.getProgramId();
+        // Check if that program exists
+        Optional<Program> res = programRepository.findProgramByOwnerIdAndProgramId(ownerId, programId);
+        if (res.isEmpty())
+            throw new ProgramNotFoundException("program with id="+programId+" doesn't exist");
+        // Update it if it does
+        return programRepository.save(program).getProgramId();
+
     }
 
     /**
      * Deletes a program owned by a particular user with the specified program id
      * @param ownerId UUID of the owner creating the program
      * @param programId program id
+     * @return rows affected
      */
-    public void deleteProgramById(UUID ownerId, Long programId) {
-        programRepository.deleteProgramByOwnerIdAndProgramId(ownerId, programId);
-    }
-
-    public Long saveProgram(Program program) {
-        return programRepository.save(program).getProgramId();
+    public int deleteProgramById(UUID ownerId, Long programId) {
+        return programRepository.deleteProgramByOwnerIdAndProgramId(ownerId, programId);
     }
 
 }
