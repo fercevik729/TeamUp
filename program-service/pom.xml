@@ -124,6 +124,7 @@
 					 <excludes>
 						 <exclude>**/constants/*</exclude>
 						 <exclude>**/config/*</exclude>
+						 <exclude>**/token/*</exclude>
 						 <exclude>com/fercevik/programservice/ProgramServiceApplication.class</exclude>
 					 </excludes>
 				 </configuration>

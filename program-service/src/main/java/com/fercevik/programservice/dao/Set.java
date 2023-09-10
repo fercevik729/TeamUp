@@ -27,5 +27,5 @@ public class Set {
 
     private int reps;
     private double weight;
-    private Duration duration;
+    private double duration;
 }

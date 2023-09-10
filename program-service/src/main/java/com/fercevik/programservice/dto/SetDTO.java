@@ -24,5 +24,5 @@ public class SetDTO implements Serializable {
     @Min(value = 1, message = "Weight cannot be less than 1")
     private double weight;
 
-    private Duration duration;
+    private double duration;
 }
